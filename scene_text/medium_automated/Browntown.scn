@@ -1,0 +1,3844 @@
+{
+  "objects": [
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "lay on",
+        "pick up",
+        "clean"
+      ],
+      "floor_area": 2.17964191448151,
+      "surface_coverage": 0.9133719433491714,
+      "class_": "bench",
+      "id": 1,
+      "location": [
+        1.0077514196198019,
+        1.4231337431202307,
+        0.769436170585486
+      ],
+      "material": null,
+      "size": [
+        0.947835674266037,
+        0.32259394008222575,
+        1.5203965573781304
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.143078899514068,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "pick up",
+        "carry",
+        "empty",
+        "fill",
+        "prepare",
+        "put in",
+        "weigh",
+        "clean",
+        "store"
+      ],
+      "floor_area": 1.9041388977454545,
+      "surface_coverage": 0.27314038447310435,
+      "class_": "suitcase",
+      "id": 2,
+      "location": [
+        -2.7640058221435755,
+        0.02428229545105859,
+        1.090324886485603
+      ],
+      "material": null,
+      "size": [
+        0.5368581228949778,
+        0.7461601462424632,
+        0.3596619205268823
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.029340542219337948,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "grab",
+        "open",
+        "hold",
+        "drink from"
+      ],
+      "floor_area": 0.6677403432878182,
+      "surface_coverage": 0.23651928021076582,
+      "class_": "bottle",
+      "id": 3,
+      "location": [
+        1.2340765409044747,
+        0.7787443964945746,
+        1.2177364192351772
+      ],
+      "material": null,
+      "size": [
+        0.2216719862630092,
+        0.21509297008140693,
+        0.6396713912506282
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.014430360648000028,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "grab",
+        "open",
+        "hold",
+        "drink from"
+      ],
+      "floor_area": 0.38141292252870834,
+      "surface_coverage": 0.02654718932009407,
+      "class_": "bottle",
+      "id": 4,
+      "location": [
+        -0.1867751047580771,
+        -2.446616080245822,
+        1.0826228015169352
+      ],
+      "material": null,
+      "size": [
+        0.1386689284577865,
+        0.1071985049526325,
+        0.22658493127688528
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0012178929066131998,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "grab",
+        "open",
+        "hold",
+        "drink from"
+      ],
+      "floor_area": 0.7249693464187009,
+      "surface_coverage": 0.0741143313300461,
+      "class_": "bottle",
+      "id": 5,
+      "location": [
+        -1.8714307269944603,
+        6.018014803721831,
+        1.4841316069405235
+      ],
+      "material": null,
+      "size": [
+        0.2990287976397017,
+        0.10088593296877146,
+        0.27631969666476985
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.003063398255949392,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "grab",
+        "drink from",
+        "hold",
+        "clean",
+        "pour in",
+        "set on"
+      ],
+      "floor_area": 0.275179758555673,
+      "surface_coverage": 0.0072937106437244,
+      "class_": "wine glass",
+      "id": 6,
+      "location": [
+        1.301235021449584,
+        -3.985368647142946,
+        0.834150201769788
+      ],
+      "material": null,
+      "size": [
+        0.07282566366135446,
+        0.10582572672895818,
+        0.08864955209372383
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.00022385453147858494,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "eat",
+        "grab",
+        "peel",
+        "hold",
+        "through away",
+        "pick up",
+        "bite"
+      ],
+      "floor_area": 0.7215862566590705,
+      "surface_coverage": 0.024753971442271237,
+      "class_": "apple",
+      "id": 7,
+      "location": [
+        -3.064920874573161,
+        -4.25725919809425,
+        0.9817852496841959
+      ],
+      "material": null,
+      "size": [
+        0.30566914408437285,
+        0.09653613307814624,
+        0.06236467596695927
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007446096356062794,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "bake",
+        "eat",
+        "dip",
+        "through away",
+        "bite"
+      ],
+      "floor_area": 1.1268751602866915,
+      "surface_coverage": 0.08783393518854007,
+      "class_": "cake",
+      "id": 8,
+      "location": [
+        0.16870241722250723,
+        -5.827470512759856,
+        4.06867458779609
+      ],
+      "material": null,
+      "size": [
+        0.3844043969807884,
+        0.3010336145663084,
+        0.21577867927124084
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.009917826775063518,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 5.460619158124541,
+      "surface_coverage": 5.466107795248551,
+      "class_": "chair",
+      "id": 9,
+      "location": [
+        -3.1129281120640764,
+        -3.840093105199431,
+        0.525695292618714
+      ],
+      "material": null,
+      "size": [
+        2.0767557312322857,
+        0.9965908579738652,
+        1.1280714963841854
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.210173481023838,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 2.4226030608716496,
+      "surface_coverage": 1.2743678648295362,
+      "class_": "chair",
+      "id": 10,
+      "location": [
+        -3.7820820569575293,
+        -3.6688189473546364,
+        0.8022710908161259
+      ],
+      "material": null,
+      "size": [
+        0.6312241139150587,
+        0.7316378049433658,
+        0.5535476589580229
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.12557593390181848,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 6.107785635410624,
+      "surface_coverage": 8.14839969328675,
+      "class_": "chair",
+      "id": 11,
+      "location": [
+        1.8121576487447442,
+        -3.4142916036958666,
+        0.5272328730126782
+      ],
+      "material": null,
+      "size": [
+        1.4512565367406192,
+        2.081808123162717,
+        1.101720280813201
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 2.387295781062113,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 2.647623390077667,
+      "surface_coverage": 1.7417542714043879,
+      "class_": "chair",
+      "id": 12,
+      "location": [
+        1.7520000113416354,
+        -4.937914791452156,
+        0.5248584833631694
+      ],
+      "material": null,
+      "size": [
+        0.875328744233606,
+        0.7676586892805695,
+        1.0849722582184236
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.34102878450623597,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 2.327351565562995,
+      "surface_coverage": 0.2684343173621435,
+      "class_": "chair",
+      "id": 13,
+      "location": [
+        10.066774900931927,
+        0.09075406673407255,
+        1.8451829806060565
+      ],
+      "material": null,
+      "size": [
+        0.6751299903734882,
+        0.7936924496599416,
+        0.793204644027417
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.08711109848170548,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 2.688546365105847,
+      "surface_coverage": 0.97122258317388,
+      "class_": "chair",
+      "id": 14,
+      "location": [
+        10.104006742204223,
+        -0.08951582166924099,
+        2.2643527107214894
+      ],
+      "material": null,
+      "size": [
+        0.698811520759616,
+        0.8971770308500344,
+        0.4937361038711954
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.10533799156398856,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "step on",
+        "clean",
+        "break",
+        "move"
+      ],
+      "floor_area": 4.278408658878327,
+      "surface_coverage": 2.7306676531400647,
+      "class_": "chair",
+      "id": 15,
+      "location": [
+        1.274670903445437,
+        -4.270135983896205,
+        3.6201422384943207
+      ],
+      "material": null,
+      "size": [
+        1.5021901330055827,
+        1.1265497434403238,
+        1.2386444212330372
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.7480981899565814,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 4.701839405142054,
+      "surface_coverage": 4.517250982476408,
+      "class_": "couch",
+      "id": 16,
+      "location": [
+        6.671618348787274,
+        -2.08903823588924,
+        0.21528521411254364
+      ],
+      "material": null,
+      "size": [
+        1.5930354161111282,
+        1.3335331437185851,
+        1.0359012636383778
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.206223202278428,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 4.901580223432802,
+      "surface_coverage": 3.5276581358817833,
+      "class_": "couch",
+      "id": 17,
+      "location": [
+        8.214427254920592,
+        -2.1240137658557714,
+        0.2198353302569674
+      ],
+      "material": null,
+      "size": [
+        1.6247726214019842,
+        1.376969137548866,
+        1.0256705633287282
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.2300963275764139,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 11.362527590221621,
+      "surface_coverage": 9.770189133645001,
+      "class_": "couch",
+      "id": 18,
+      "location": [
+        5.615413893435604,
+        -4.604439376951981,
+        0.21753105057661037
+      ],
+      "material": null,
+      "size": [
+        3.9513834180320675,
+        3.215179668406321,
+        1.0087360533585028
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 6.113647073938119,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 7.252087165965786,
+      "surface_coverage": 4.5647214916419765,
+      "class_": "couch",
+      "id": 19,
+      "location": [
+        -5.677771663663806,
+        -2.0637605052439327,
+        0.40228025855919275
+      ],
+      "material": null,
+      "size": [
+        1.0129565868321926,
+        3.0096203275224536,
+        0.8524295016192758
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.494853275529422,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 4.944138191061279,
+      "surface_coverage": 2.7853477861033418,
+      "class_": "couch",
+      "id": 20,
+      "location": [
+        -5.36424312167469,
+        0.3510360082465238,
+        0.4314278489746537
+      ],
+      "material": null,
+      "size": [
+        1.5915035668331186,
+        1.5349761586872925,
+        0.9059623157170545
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.8657256668519402,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "lay on",
+        "step on",
+        "tidy",
+        "clean",
+        "move"
+      ],
+      "floor_area": 4.8880321257311765,
+      "surface_coverage": 2.6416399949789304,
+      "class_": "couch",
+      "id": 21,
+      "location": [
+        9.155300289775282,
+        1.5463233996707566,
+        3.4254174146861005
+      ],
+      "material": null,
+      "size": [
+        1.457638700390401,
+        1.6215259585772885,
+        0.863049665439223
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.871614820797294,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 3.3940043414847816,
+      "surface_coverage": 12.669832377918771,
+      "class_": "potted plant",
+      "id": 22,
+      "location": [
+        3.134816343559079,
+        0.4751306232635693,
+        1.9822697135256713
+      ],
+      "material": null,
+      "size": [
+        1.0722340146261633,
+        0.9683051203964611,
+        3.9916395315142346
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 2.0445979546848383,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.5730959641269301,
+      "surface_coverage": 0.025830968364963427,
+      "class_": "potted plant",
+      "id": 23,
+      "location": [
+        3.1144444967776446,
+        -0.907548413099569,
+        3.4686000438747477
+      ],
+      "material": null,
+      "size": [
+        0.17988953426987386,
+        0.20237114972827763,
+        0.18139956589350126
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.001041617313630464,
+      "parent_room": 12
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 3.2534247704519,
+      "surface_coverage": 2.9458820478331513,
+      "class_": "potted plant",
+      "id": 24,
+      "location": [
+        -0.26364107611558674,
+        1.2904145095290935,
+        0.6111659104104303
+      ],
+      "material": null,
+      "size": [
+        1.2798255623364083,
+        0.9114420872904465,
+        1.2423572115222743
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.4683540031351973,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 5.810604187513209,
+      "surface_coverage": 3.5594237316786432,
+      "class_": "potted plant",
+      "id": 25,
+      "location": [
+        2.768211324607882,
+        -0.7437090207221174,
+        3.8818323971450717
+      ],
+      "material": null,
+      "size": [
+        1.6998325772410023,
+        1.9737124361777558,
+        1.532273400372374
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.2073098545345993,
+      "parent_room": 12
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.537319656040218,
+      "surface_coverage": 2.757899539690431,
+      "class_": "potted plant",
+      "id": 26,
+      "location": [
+        0.057218525305621215,
+        -1.2303258794467422,
+        0.6522066246846878
+      ],
+      "material": null,
+      "size": [
+        0.7610392883243047,
+        0.8738423844518386,
+        1.3221500854463584
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.39956514003671156,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.0898977097046147,
+      "surface_coverage": 1.0874427114963612,
+      "class_": "potted plant",
+      "id": 27,
+      "location": [
+        -1.5213586581591094,
+        0.3230758086213539,
+        0.360893511790595
+      ],
+      "material": null,
+      "size": [
+        0.7468440050249212,
+        0.6710089682617972,
+        0.7344348350856066
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.15729968563205296,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.38218941332692163,
+      "surface_coverage": 0.027170918989976298,
+      "class_": "potted plant",
+      "id": 28,
+      "location": [
+        2.758040077342593,
+        0.8109032755410235,
+        2.255134547726086
+      ],
+      "material": null,
+      "size": [
+        0.11811404786876167,
+        0.1367873652787429,
+        0.1135692916662836
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0003386896883020131,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.7600631648384113,
+      "surface_coverage": 0.01741736441611155,
+      "class_": "potted plant",
+      "id": 29,
+      "location": [
+        3.4703858802370133,
+        -0.586040892097054,
+        3.451673333033982
+      ],
+      "material": null,
+      "size": [
+        0.18743394130377578,
+        0.2989308730201404,
+        0.24776354822528956
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.003376093852377314,
+      "parent_room": 12
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.5522441340043753,
+      "surface_coverage": 0.029738424646637517,
+      "class_": "potted plant",
+      "id": 30,
+      "location": [
+        2.9956399461287924,
+        0.7320612019164863,
+        0.9325919777136575
+      ],
+      "material": null,
+      "size": [
+        0.2527089336814461,
+        0.07364403776921158,
+        0.2001359415578129
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007524484942498789,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.8601755098808661,
+      "surface_coverage": 0.13896812736479863,
+      "class_": "potted plant",
+      "id": 31,
+      "location": [
+        4.290190527009666,
+        2.368809399476583,
+        3.963085086375885
+      ],
+      "material": null,
+      "size": [
+        0.3375508530113027,
+        0.193922744458634,
+        0.2876703701408845
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.008154540183485366,
+      "parent_room": 11
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 6.098842281073801,
+      "surface_coverage": 9.807378083391187,
+      "class_": "potted plant",
+      "id": 32,
+      "location": [
+        4.877513064140762,
+        -5.652543280032833,
+        1.0270318493848438
+      ],
+      "material": null,
+      "size": [
+        2.4317181535366497,
+        1.3634080172724854,
+        2.620613084782508
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 3.33196345161317,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.1209297192710634,
+      "surface_coverage": 1.3447892666578944,
+      "class_": "potted plant",
+      "id": 33,
+      "location": [
+        3.369507475617917,
+        -3.731706391371823,
+        0.955219696506212
+      ],
+      "material": null,
+      "size": [
+        0.5022716740153448,
+        0.8312107830117963,
+        0.633977604885309
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.12796456126133304,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.03954878081598,
+      "surface_coverage": 1.7745122312732478,
+      "class_": "potted plant",
+      "id": 34,
+      "location": [
+        3.9858038753281178,
+        -2.9573858073082366,
+        0.5683648595244922
+      ],
+      "material": null,
+      "size": [
+        0.6989268922672691,
+        0.6103504284350123,
+        1.6557679639689273
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.22982883123563586,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.3534341480437586,
+      "surface_coverage": 0.015984473616672993,
+      "class_": "potted plant",
+      "id": 35,
+      "location": [
+        6.269723328310651,
+        -1.412212584331396,
+        2.18147332995968
+      ],
+      "material": null,
+      "size": [
+        0.062308036666661515,
+        0.1539217294528099,
+        0.3890849224039792
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007625687541867644,
+      "parent_room": 21
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.7347481633519635,
+      "surface_coverage": 0.7118621822968135,
+      "class_": "potted plant",
+      "id": 36,
+      "location": [
+        0.27447542910721373,
+        -5.6555585915638655,
+        0.22991590650080937
+      ],
+      "material": null,
+      "size": [
+        0.5283812536861845,
+        0.5049030153820224,
+        0.5041776810369345
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.07045941946417338,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.46052657284508114,
+      "surface_coverage": 0.009157567046509172,
+      "class_": "potted plant",
+      "id": 37,
+      "location": [
+        4.0969456585444295,
+        -2.4248922617791413,
+        3.5623301042735758
+      ],
+      "material": null,
+      "size": [
+        0.1625544161661212,
+        0.14368289918842292,
+        0.4054766978588247
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0015330372534868232,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.46405090593949344,
+      "surface_coverage": 0.01980043230175935,
+      "class_": "potted plant",
+      "id": 38,
+      "location": [
+        3.461190801545192,
+        -3.4217000754831117,
+        0.8025144252087335
+      ],
+      "material": null,
+      "size": [
+        0.16490526937079153,
+        0.13713124618026917,
+        0.09126416455493225
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007278246446078815,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.48198484234111266,
+      "surface_coverage": 0.018013946025540524,
+      "class_": "potted plant",
+      "id": 39,
+      "location": [
+        4.629835067713044,
+        -4.957350350188671,
+        0.5923171821453173
+      ],
+      "material": null,
+      "size": [
+        0.16561369387248526,
+        0.1621253793036166,
+        0.163796022130685
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0008663196429415644,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.7994992412509344,
+      "surface_coverage": 0.0736317135132116,
+      "class_": "potted plant",
+      "id": 40,
+      "location": [
+        5.221092475182244,
+        -5.694957478227604,
+        0.532686966581086
+      ],
+      "material": null,
+      "size": [
+        0.2596852734326127,
+        0.2379563127353519,
+        0.2890558407096068
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0055340015352819145,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.5161427756521575,
+      "surface_coverage": 0.4332474341557162,
+      "class_": "potted plant",
+      "id": 41,
+      "location": [
+        5.3795904302723585,
+        -5.98578041460528,
+        0.08078908435592264
+      ],
+      "material": null,
+      "size": [
+        1.147234150781565,
+        0.43139998578416705,
+        0.5389916815719954
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.05932527599927901,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.9543568426065046,
+      "surface_coverage": 0.07799012492594692,
+      "class_": "potted plant",
+      "id": 42,
+      "location": [
+        5.2038633102009655,
+        -5.366609610834494,
+        0.5010595764392846
+      ],
+      "material": null,
+      "size": [
+        0.21299067466272792,
+        0.3993180526600124,
+        0.33127970927034966
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.007481702798457933,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.3481723189696813,
+      "surface_coverage": 0.04180132664101857,
+      "class_": "potted plant",
+      "id": 43,
+      "location": [
+        4.157170093522442,
+        -4.276468246936256,
+        0.5135318092295058
+      ],
+      "material": null,
+      "size": [
+        0.15591633054364085,
+        0.6219313494067769,
+        0.10337862073831794
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.001729120873550645,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.5801923632461793,
+      "surface_coverage": 0.02281551419506245,
+      "class_": "potted plant",
+      "id": 44,
+      "location": [
+        4.479310047673184,
+        -4.576421466995466,
+        0.5848233085691672
+      ],
+      "material": null,
+      "size": [
+        0.2316808283910321,
+        0.15813948313694137,
+        0.21047661539381296
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0009550218408383883,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.8273249580852836,
+      "surface_coverage": 0.055233363578272465,
+      "class_": "potted plant",
+      "id": 45,
+      "location": [
+        5.11147296783297,
+        -5.355303424743314,
+        0.18116220320080453
+      ],
+      "material": null,
+      "size": [
+        0.15534328404165,
+        0.3462022834252343,
+        0.2696907147985008
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0033812828419003756,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 4.087279370410113,
+      "surface_coverage": 5.066874306024281,
+      "class_": "potted plant",
+      "id": 46,
+      "location": [
+        9.321639690047434,
+        -2.130539534599526,
+        0.750658897690644
+      ],
+      "material": null,
+      "size": [
+        1.1252986269486467,
+        1.3959474472642979,
+        2.0591009136057306
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.152640803997095,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.2615685762549167,
+      "surface_coverage": 0.21502329288234276,
+      "class_": "potted plant",
+      "id": 47,
+      "location": [
+        9.157646784544989,
+        -1.6160717840950782,
+        0.21386401563834978
+      ],
+      "material": null,
+      "size": [
+        0.4056195836028529,
+        0.3538721779350338,
+        0.4543029500813016
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.02455646956627211,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.17221445981640177,
+      "surface_coverage": 0.007139057409412823,
+      "class_": "potted plant",
+      "id": 48,
+      "location": [
+        9.459624230004577,
+        -2.193237606867227,
+        0.9150775868156666
+      ],
+      "material": null,
+      "size": [
+        0.04775245335952505,
+        0.06413951450868538,
+        0.0829024498924209
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 4.736765772680041e-05,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.6376151069533655,
+      "surface_coverage": 0.1060458145874779,
+      "class_": "potted plant",
+      "id": 49,
+      "location": [
+        8.54075080344446,
+        -2.203155596191467,
+        0.5010288420146012
+      ],
+      "material": null,
+      "size": [
+        0.515424806733769,
+        0.5555773453647062,
+        0.4282944722375444
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.017697993890019355,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.7003648455356513,
+      "surface_coverage": 0.9984106491870095,
+      "class_": "potted plant",
+      "id": 50,
+      "location": [
+        1.9507209917159414,
+        1.3192324424114341,
+        0.6410916065925617
+      ],
+      "material": null,
+      "size": [
+        0.5666525980477368,
+        0.5098872531034975,
+        1.2840202355862584
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.13302852764847717,
+      "parent_room": 1
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.0747629059666741,
+      "surface_coverage": 0.27526632572219345,
+      "class_": "potted plant",
+      "id": 51,
+      "location": [
+        -4.398444327992049,
+        -2.063936110948405,
+        0.6120059310161663
+      ],
+      "material": null,
+      "size": [
+        0.35282881173666514,
+        0.3052771316440208,
+        0.5751439552468631
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.026551556687047236,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.9274859523551661,
+      "surface_coverage": 0.23230143284086757,
+      "class_": "potted plant",
+      "id": 52,
+      "location": [
+        -2.688231116498466,
+        -4.2602961886833635,
+        1.0977794964667917
+      ],
+      "material": null,
+      "size": [
+        0.37296061626350996,
+        0.15762220490683632,
+        0.40442606513990076
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.011319740753845403,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.162448068904182,
+      "surface_coverage": 0.27866437362991725,
+      "class_": "potted plant",
+      "id": 53,
+      "location": [
+        -4.562532976808528,
+        -2.307991086407836,
+        0.44124424687424024
+      ],
+      "material": null,
+      "size": [
+        0.6383026101441471,
+        0.7526882734345608,
+        0.19186057121702005
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.033343138603853024,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.2199251818422507,
+      "surface_coverage": 0.13569749494803554,
+      "class_": "potted plant",
+      "id": 54,
+      "location": [
+        -4.071362004099375,
+        -6.6202394790494274,
+        1.0080207714925984
+      ],
+      "material": null,
+      "size": [
+        0.45412542801900324,
+        0.3111945820468778,
+        0.26447496669284054
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.013896548777037268,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.8994647644585015,
+      "surface_coverage": 0.19029078157226142,
+      "class_": "potted plant",
+      "id": 55,
+      "location": [
+        -2.155931631441123,
+        -0.798684782412427,
+        1.1260279241634088
+      ],
+      "material": null,
+      "size": [
+        0.3342884300288971,
+        0.21635307867350828,
+        0.42534376436783683
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.014775093586455845,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 4.848620635806498,
+      "surface_coverage": 5.924360850116977,
+      "class_": "potted plant",
+      "id": 56,
+      "location": [
+        -5.594112921330266,
+        0.843318457667614,
+        1.6021404983706047
+      ],
+      "material": null,
+      "size": [
+        1.1889566139603183,
+        1.666679329864635,
+        2.5690830244791565
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 1.9643174291111039,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.1976227804405435,
+      "surface_coverage": 0.24400980461267904,
+      "class_": "potted plant",
+      "id": 57,
+      "location": [
+        -5.028477507860973,
+        0.972226956921795,
+        0.7236959428122604
+      ],
+      "material": null,
+      "size": [
+        0.451633575582683,
+        0.29802365044760004,
+        0.46830228023770487
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.020134633216319465,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.0949512406662625,
+      "surface_coverage": 0.13681806349314257,
+      "class_": "potted plant",
+      "id": 58,
+      "location": [
+        -5.236541808535675,
+        1.6393002904269087,
+        0.5829690724961601
+      ],
+      "material": null,
+      "size": [
+        0.4701636170713508,
+        0.21882508364342357,
+        0.8095218813565236
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.018025417657941637,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.242898490900715,
+      "surface_coverage": 2.3637971340767887,
+      "class_": "potted plant",
+      "id": 59,
+      "location": [
+        10.936757212559552,
+        -1.0169949837809757,
+        2.0304357163975544
+      ],
+      "material": null,
+      "size": [
+        0.8105157084502164,
+        0.6396401317599014,
+        1.146100149157326
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.2944279429143204,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.8535011369901304,
+      "surface_coverage": 0.19953789701259045,
+      "class_": "potted plant",
+      "id": 60,
+      "location": [
+        11.187277764936901,
+        -0.7091114322984884,
+        1.8437729583828875
+      ],
+      "material": null,
+      "size": [
+        0.38329085104458294,
+        0.13194398276749453,
+        0.7449905629593014
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.009581919915291644,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.0715954072130607,
+      "surface_coverage": 0.1910154023411751,
+      "class_": "potted plant",
+      "id": 61,
+      "location": [
+        11.379129241205561,
+        -0.09189724768855337,
+        2.3777066486514764
+      ],
+      "material": null,
+      "size": [
+        0.3085813477661645,
+        0.3165335275911824,
+        0.28297851803077423
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.013355215829645477,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.5668062211109492,
+      "surface_coverage": 0.18037756319193818,
+      "class_": "potted plant",
+      "id": 62,
+      "location": [
+        2.3962835018225785,
+        2.1162765896261795,
+        3.910180589772314
+      ],
+      "material": null,
+      "size": [
+        0.6487417481169389,
+        0.34637994142235407,
+        0.20742418158871345
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.01877592913003383,
+      "parent_room": 4
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.9456415236634534,
+      "surface_coverage": 0.16057491220143172,
+      "class_": "potted plant",
+      "id": 63,
+      "location": [
+        5.342252243320427,
+        2.325103077262213,
+        3.958671384894438
+      ],
+      "material": null,
+      "size": [
+        0.3778516909931504,
+        0.20623607898564877,
+        0.27921948277281894
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.007987627590350975,
+      "parent_room": 11
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.8835908560189625,
+      "surface_coverage": 0.0529153584251467,
+      "class_": "potted plant",
+      "id": 64,
+      "location": [
+        5.586643635754248,
+        2.5197053409583026,
+        3.9829855282500484
+      ],
+      "material": null,
+      "size": [
+        0.322200388465232,
+        0.22184555869144162,
+        0.2909739506555149
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0059576780920025975,
+      "parent_room": 11
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.7583160639368641,
+      "surface_coverage": 0.058036055039890844,
+      "class_": "potted plant",
+      "id": 65,
+      "location": [
+        6.316069778456356,
+        5.750305150414144,
+        3.8180180010183
+      ],
+      "material": null,
+      "size": [
+        0.2881059156590444,
+        0.2009687839551031,
+        0.1958953726161825
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.003337639614799468,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.5129046628431562,
+      "surface_coverage": 0.032376069236017595,
+      "class_": "potted plant",
+      "id": 66,
+      "location": [
+        6.194654266341638,
+        5.929046326821016,
+        3.9758006085341524
+      ],
+      "material": null,
+      "size": [
+        0.1342522202933738,
+        0.16620295586959255,
+        0.3280195469898963
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0016974238888774718,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.156281524774706,
+      "surface_coverage": 0.14484854715927215,
+      "class_": "potted plant",
+      "id": 67,
+      "location": [
+        9.120256532841715,
+        5.858791595176724,
+        3.8593423595732492
+      ],
+      "material": null,
+      "size": [
+        0.3908329366800274,
+        0.30409151502768506,
+        0.37424934642630703
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.01662266385327898,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.0115045113203485,
+      "surface_coverage": 0.13268749458603785,
+      "class_": "potted plant",
+      "id": 68,
+      "location": [
+        2.4284910630149072,
+        3.308415916567329,
+        3.8126819719059464
+      ],
+      "material": null,
+      "size": [
+        0.2706730360450198,
+        0.35525558663649903,
+        0.5008133852183545
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.012815997797625987,
+      "parent_room": 3
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.6326003995406975,
+      "surface_coverage": 0.548119470403384,
+      "class_": "potted plant",
+      "id": 69,
+      "location": [
+        4.726840828195858,
+        2.784444167850605,
+        4.194565015269699
+      ],
+      "material": null,
+      "size": [
+        0.3872608266721542,
+        0.6302644476723098,
+        0.7521763566477482
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.08415713978110399,
+      "parent_room": 10
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.4641546685218163,
+      "surface_coverage": 0.14770496820622828,
+      "class_": "potted plant",
+      "id": 70,
+      "location": [
+        -0.4605564178572797,
+        -6.540924922318045,
+        1.0624722364668193
+      ],
+      "material": null,
+      "size": [
+        0.5138121912667345,
+        0.34133029114996294,
+        0.44285663158026933
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.025421467258354896,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.3370156993372195,
+      "surface_coverage": 0.23935488808060673,
+      "class_": "potted plant",
+      "id": 71,
+      "location": [
+        7.0164115416933885,
+        5.769788927092305,
+        0.8459028551800489
+      ],
+      "material": null,
+      "size": [
+        0.2972925753157769,
+        0.4757438423633955,
+        0.30483562035480416
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.022316995629069702,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 4.12320111568965,
+      "surface_coverage": 1.589756418372049,
+      "class_": "potted plant",
+      "id": 72,
+      "location": [
+        8.491468373723288,
+        1.4252858163729787,
+        2.6013175039507663
+      ],
+      "material": null,
+      "size": [
+        1.7213055284204186,
+        0.770155178127572,
+        0.6498743076443652
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.32613193426990156,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.4844184076791591,
+      "surface_coverage": 0.5257993786173281,
+      "class_": "potted plant",
+      "id": 73,
+      "location": [
+        8.81943535763357,
+        1.2292821651043715,
+        1.1779428949606898
+      ],
+      "material": null,
+      "size": [
+        0.5067013151269304,
+        0.375094753081078,
+        0.7187170522985313
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.07470315851911109,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.207691007920669,
+      "surface_coverage": 0.1987864345391135,
+      "class_": "potted plant",
+      "id": 74,
+      "location": [
+        10.484997842116663,
+        5.549634961390174,
+        0.6990593769235534
+      ],
+      "material": null,
+      "size": [
+        0.4131355233571643,
+        0.3227736125256486,
+        0.41839308360922695
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.020125498734840874,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.157062265768977,
+      "surface_coverage": 2.9648961466155863,
+      "class_": "potted plant",
+      "id": 75,
+      "location": [
+        10.365050452338735,
+        1.3113101859360254,
+        1.1543204192266119
+      ],
+      "material": null,
+      "size": [
+        0.7199590470154309,
+        0.5492333397918256,
+        2.305922027431387
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.4127021324418176,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.878857908630172,
+      "surface_coverage": 0.47705502846859094,
+      "class_": "potted plant",
+      "id": 76,
+      "location": [
+        0.7997186185359177,
+        3.390264673301447,
+        2.455375932259205
+      ],
+      "material": null,
+      "size": [
+        1.287445047506657,
+        0.3981230800936224,
+        0.5309287508274045
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.06519061688264015,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 6.549525039052528,
+      "surface_coverage": 7.332650357789896,
+      "class_": "potted plant",
+      "id": 77,
+      "location": [
+        -2.3307918601921367,
+        3.837279399002092,
+        0.5582588087562811
+      ],
+      "material": null,
+      "size": [
+        2.2076628439735644,
+        1.9951612319629435,
+        1.2038976898244693
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 2.2093363274351114,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 1.2346776580398553,
+      "surface_coverage": 0.14261261329156422,
+      "class_": "potted plant",
+      "id": 78,
+      "location": [
+        -3.123506408467403,
+        3.8618822515430042,
+        0.03004548775481964
+      ],
+      "material": null,
+      "size": [
+        0.344654733651816,
+        0.4183490049547247,
+        0.16729276762855133
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.007676803802397328,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 0.5775024071087435,
+      "surface_coverage": 0.05665487569833106,
+      "class_": "potted plant",
+      "id": 79,
+      "location": [
+        0.05019072914091871,
+        5.667043519726339,
+        0.9456565593345918
+      ],
+      "material": null,
+      "size": [
+        0.18432705034837954,
+        0.16802023174317782,
+        0.22167219740577648
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.002649688671386876,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "water",
+        "pick up",
+        "move"
+      ],
+      "floor_area": 2.2362932853159196,
+      "surface_coverage": 0.6298489948065662,
+      "class_": "potted plant",
+      "id": 80,
+      "location": [
+        1.063178373680405,
+        1.2849966964950217,
+        1.790934857562669
+      ],
+      "material": null,
+      "size": [
+        0.8365866629904055,
+        0.5039110099054052,
+        0.6211219193604081
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.07742704198700077,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "make",
+        "sit on",
+        "step on",
+        "lay on",
+        "move"
+      ],
+      "floor_area": 8.548764909246549,
+      "surface_coverage": 9.475772668829382,
+      "class_": "bed",
+      "id": 81,
+      "location": [
+        7.850256689967701,
+        4.751318454391951,
+        3.690074718266129
+      ],
+      "material": null,
+      "size": [
+        2.2162184941830523,
+        2.5305060467832847,
+        1.4205854864949865
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 4.202891526359366,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "make",
+        "sit on",
+        "step on",
+        "lay on",
+        "move"
+      ],
+      "floor_area": 9.225247783377835,
+      "surface_coverage": 11.026471348521822,
+      "class_": "bed",
+      "id": 82,
+      "location": [
+        8.726533251688698,
+        4.620261429355917,
+        0.6565818071951403
+      ],
+      "material": null,
+      "size": [
+        2.1854417619598676,
+        2.7777754893228765,
+        1.3048482157262038
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 5.010731387176257,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "sit at",
+        "lay on",
+        "pick up",
+        "move",
+        "clean",
+        "set",
+        "decorate"
+      ],
+      "floor_area": 6.472452179115077,
+      "surface_coverage": 3.9795656808159054,
+      "class_": "dining table",
+      "id": 83,
+      "location": [
+        1.7634400243452162,
+        -3.8541136068103974,
+        0.8001748715164738
+      ],
+      "material": null,
+      "size": [
+        1.3279478683083166,
+        2.229806525415011,
+        0.5345098807950883
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.8175659715189838,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "sit at",
+        "lay on",
+        "pick up",
+        "move",
+        "clean",
+        "set",
+        "decorate"
+      ],
+      "floor_area": 3.0708760849209487,
+      "surface_coverage": 0.620058443251812,
+      "class_": "dining table",
+      "id": 84,
+      "location": [
+        3.638471477688034,
+        -4.38076708617177,
+        0.2957973358989441
+      ],
+      "material": null,
+      "size": [
+        0.5115161523130296,
+        1.3297735241877828,
+        0.490809380593644
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.1348873680806316,
+      "parent_room": 18
+    },
+    {
+      "action_affordance": [
+        "sit at",
+        "lay on",
+        "pick up",
+        "move",
+        "clean",
+        "set",
+        "decorate"
+      ],
+      "floor_area": 7.04699487823229,
+      "surface_coverage": 5.295858810062455,
+      "class_": "dining table",
+      "id": 85,
+      "location": [
+        -3.1070155941833693,
+        -4.304390282641995,
+        0.5433288248419984
+      ],
+      "material": null,
+      "size": [
+        2.2204446528369752,
+        1.5040322866245863,
+        1.149581094396654
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 2.0918440529778892,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "sit at",
+        "lay on",
+        "pick up",
+        "move",
+        "clean",
+        "set",
+        "decorate"
+      ],
+      "floor_area": 4.304565711233808,
+      "surface_coverage": 1.6828032393298205,
+      "class_": "dining table",
+      "id": 86,
+      "location": [
+        9.44030379419821,
+        -0.06212023224392105,
+        2.0613370453335813
+      ],
+      "material": null,
+      "size": [
+        0.9670289736605859,
+        1.4427618205422257,
+        1.1240464979112987
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.6270971915720295,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "clean",
+        "flush",
+        "close",
+        "open"
+      ],
+      "floor_area": 2.4247295516350533,
+      "surface_coverage": 1.030842634665403,
+      "class_": "toilet",
+      "id": 87,
+      "location": [
+        2.7071956343018804,
+        2.7843365409141043,
+        3.3193840272380326
+      ],
+      "material": null,
+      "size": [
+        0.7783297899911696,
+        0.6917469752294507,
+        0.6409732172599276
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.1732339896592329,
+      "parent_room": 4
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "clean",
+        "flush",
+        "close",
+        "open"
+      ],
+      "floor_area": 2.317139786795764,
+      "surface_coverage": 0.9942974785939945,
+      "class_": "toilet",
+      "id": 88,
+      "location": [
+        2.684812588265824,
+        4.683647718371675,
+        3.3734073211262725
+      ],
+      "material": null,
+      "size": [
+        0.7512291700390028,
+        0.6141531836306537,
+        0.7823648017716063
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.17574453561238573,
+      "parent_room": 3
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "clean",
+        "flush",
+        "close",
+        "open"
+      ],
+      "floor_area": 2.1728223341577433,
+      "surface_coverage": 0.8413557710406251,
+      "class_": "toilet",
+      "id": 89,
+      "location": [
+        3.2299478099913275,
+        2.347232045963168,
+        0.35497970529314304
+      ],
+      "material": null,
+      "size": [
+        0.6962754291081765,
+        0.5745367576088443,
+        0.7171779880740776
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.14356094002570954,
+      "parent_room": 1
+    },
+    {
+      "action_affordance": [
+        "sit on",
+        "clean",
+        "flush",
+        "close",
+        "open"
+      ],
+      "floor_area": 2.4818243273039204,
+      "surface_coverage": 0.9171546232785482,
+      "class_": "toilet",
+      "id": 90,
+      "location": [
+        1.2206590761062708,
+        2.3958458318594484,
+        0.33976614143946715
+      ],
+      "material": null,
+      "size": [
+        0.9436060459378179,
+        0.6648363966074502,
+        0.6707370488419566
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.1680956461317692,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "turn on",
+        "turn off",
+        "look at",
+        "move",
+        "plug"
+      ],
+      "floor_area": 2.9788235860211354,
+      "surface_coverage": 1.940305097144605,
+      "class_": "tv",
+      "id": 91,
+      "location": [
+        -2.725716719411182,
+        -0.0971794776189876,
+        1.6016974313416745
+      ],
+      "material": null,
+      "size": [
+        1.0088631529027072,
+        1.0562043316174368,
+        0.9141708652944314
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.16498257812404002,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "turn on",
+        "turn off",
+        "look at",
+        "move",
+        "plug"
+      ],
+      "floor_area": 2.4731486888226577,
+      "surface_coverage": 0.7195238490863836,
+      "class_": "tv",
+      "id": 92,
+      "location": [
+        -2.746263202642098,
+        0.1214596289729622,
+        1.7529753178399634
+      ],
+      "material": null,
+      "size": [
+        0.8718087121617275,
+        0.8751306307100389,
+        0.9011171616039801
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.013753640091125589,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "turn on",
+        "turn off",
+        "look at",
+        "move",
+        "plug"
+      ],
+      "floor_area": 2.0215062880362193,
+      "surface_coverage": 0.37458378896244726,
+      "class_": "tv",
+      "id": 93,
+      "location": [
+        1.5929333383324993,
+        -4.186024723818131,
+        4.024232521309017
+      ],
+      "material": null,
+      "size": [
+        0.45123536447341794,
+        0.7557458210998296,
+        0.5102452421222416
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0511997894417735,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "turn on",
+        "turn off",
+        "look at",
+        "move",
+        "plug"
+      ],
+      "floor_area": 1.7239245100651355,
+      "surface_coverage": 0.8046089763619128,
+      "class_": "tv",
+      "id": 94,
+      "location": [
+        8.357026236559523,
+        1.32277378471706,
+        4.222741032810466
+      ],
+      "material": null,
+      "size": [
+        0.5219018552290109,
+        0.5487862086090758,
+        0.5253793204255084
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.09190713227317257,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "turn on",
+        "turn off",
+        "pick up",
+        "move",
+        "work on",
+        "look at"
+      ],
+      "floor_area": 1.8203345388868448,
+      "surface_coverage": 0.43508706007613945,
+      "class_": "laptop",
+      "id": 95,
+      "location": [
+        1.6224730802951939,
+        -4.132521503348087,
+        4.022558052832558
+      ],
+      "material": null,
+      "size": [
+        0.43399428689593944,
+        0.6463161875987629,
+        0.513589262916045
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.06055616423046536,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "press",
+        "pick up",
+        "move",
+        "look for"
+      ],
+      "floor_area": 1.0808522902126105,
+      "surface_coverage": 0.03839470307914577,
+      "class_": "remote",
+      "id": 96,
+      "location": [
+        -4.541152531038627,
+        -2.4601005497190407,
+        0.4375047149828107
+      ],
+      "material": null,
+      "size": [
+        0.31622924937257046,
+        0.40616090868483345,
+        0.20978626677841528
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.004829546862989717,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "press",
+        "pick up",
+        "move",
+        "look for"
+      ],
+      "floor_area": 0.39909170634858365,
+      "surface_coverage": 0.027113427187838022,
+      "class_": "remote",
+      "id": 97,
+      "location": [
+        8.680896347534638,
+        5.931019800897645,
+        3.7532361359846087
+      ],
+      "material": null,
+      "size": [
+        0.11825854515567435,
+        0.13888504681519187,
+        0.1479759413449222
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007526190705021236,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "pick up",
+        "answer",
+        "carry",
+        "look at",
+        "call",
+        "text"
+      ],
+      "floor_area": 0.5237791614218577,
+      "surface_coverage": 0.020643665935484487,
+      "class_": "cell phone",
+      "id": 98,
+      "location": [
+        10.017060154462289,
+        5.8994667677438315,
+        0.7497242472271404
+      ],
+      "material": null,
+      "size": [
+        0.10590920227637923,
+        0.20898472044700167,
+        0.1371275360417602
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0008697750053013156,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "heat",
+        "turn on",
+        "turn off",
+        "clean"
+      ],
+      "floor_area": 1.7515550261650934,
+      "surface_coverage": 1.025347902786903,
+      "class_": "oven",
+      "id": 99,
+      "location": [
+        -0.7436102661687751,
+        -5.248345747903464,
+        0.851094933632001
+      ],
+      "material": null,
+      "size": [
+        0.22134934297829034,
+        0.770954234115397,
+        1.3948629445234764
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.09621499033737103,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "heat",
+        "turn on",
+        "turn off",
+        "clean"
+      ],
+      "floor_area": 0.8951633197738604,
+      "surface_coverage": 0.17609637195681854,
+      "class_": "oven",
+      "id": 100,
+      "location": [
+        -4.564560849524504,
+        -6.123751272627009,
+        1.2231146599672644
+      ],
+      "material": null,
+      "size": [
+        0.3960660297095977,
+        0.13267953719434544,
+        0.5747841520731217
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.01275157389445222,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 2.1604208433230085,
+      "surface_coverage": 0.3409948177584362,
+      "class_": "sink",
+      "id": 101,
+      "location": [
+        2.5034136562276883,
+        1.3228355633781872,
+        3.7941622354203095
+      ],
+      "material": null,
+      "size": [
+        0.7496410479807021,
+        0.5639965994774023,
+        0.27640848212972013
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.038222142724854406,
+      "parent_room": 4
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 2.192997748076396,
+      "surface_coverage": 0.476058895839869,
+      "class_": "sink",
+      "id": 102,
+      "location": [
+        2.590116816009779,
+        4.088345112392082,
+        3.485851163565576
+      ],
+      "material": null,
+      "size": [
+        0.5471008964082058,
+        0.6836301989048463,
+        0.7803075567649937
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.09588553221959036,
+      "parent_room": 3
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 2.779256769060577,
+      "surface_coverage": 0.8718024675513282,
+      "class_": "sink",
+      "id": 103,
+      "location": [
+        2.7789099899269423,
+        5.6362955564810395,
+        3.2563448552532517
+      ],
+      "material": null,
+      "size": [
+        0.8735462788541923,
+        0.6599376235945877,
+        0.5198706156225823
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.17633036314539235,
+      "parent_room": 3
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 2.4054518815509986,
+      "surface_coverage": 0.5121071888239078,
+      "class_": "sink",
+      "id": 104,
+      "location": [
+        -2.722628592239471,
+        -7.060572431461994,
+        0.7872854913674412
+      ],
+      "material": null,
+      "size": [
+        0.9128805113629621,
+        0.5090005255216132,
+        0.19712782746252688
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.03553651282718569,
+      "parent_room": 17
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 1.399482638057442,
+      "surface_coverage": 0.3249569153536997,
+      "class_": "sink",
+      "id": 105,
+      "location": [
+        1.8917382738580066,
+        1.8404065052336263,
+        0.8980160197753367
+      ],
+      "material": null,
+      "size": [
+        0.4182211011595909,
+        0.4969211364230046,
+        0.2229261997209424
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.020355138200515207,
+      "parent_room": 1
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 1.5501041247200285,
+      "surface_coverage": 0.3037140063135647,
+      "class_": "sink",
+      "id": 106,
+      "location": [
+        0.9467445083283227,
+        5.737811069035383,
+        0.8831832169351287
+      ],
+      "material": null,
+      "size": [
+        0.45768657640229926,
+        0.5245419296091676,
+        0.11755752636745975
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.016169770299391407,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "wash",
+        "clean"
+      ],
+      "floor_area": 1.5373310234517907,
+      "surface_coverage": 0.3231823046454261,
+      "class_": "sink",
+      "id": 107,
+      "location": [
+        -0.6336414056920331,
+        5.734223672406783,
+        0.873226955939268
+      ],
+      "material": null,
+      "size": [
+        0.4400048562841794,
+        0.5254107630464313,
+        0.12587570910205537
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.01616843524628032,
+      "parent_room": 2
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.2133250380903633,
+      "surface_coverage": 0.07214125082571732,
+      "class_": "book",
+      "id": 108,
+      "location": [
+        -4.661175651591822,
+        -2.3510779443179466,
+        0.4539916699220786
+      ],
+      "material": null,
+      "size": [
+        0.3281750513162054,
+        0.46242182770457285,
+        0.1671895705475126
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.005773539678386011,
+      "parent_room": 19
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.42832755837791,
+      "surface_coverage": 0.16092417152667082,
+      "class_": "book",
+      "id": 109,
+      "location": [
+        8.680252517021323,
+        0.7578540724471488,
+        2.561820040401229
+      ],
+      "material": null,
+      "size": [
+        0.5280340816712421,
+        0.2520175909186455,
+        0.19169837414742696
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.014216421434499677,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.8931634899099317,
+      "surface_coverage": 0.08616645113081989,
+      "class_": "book",
+      "id": 110,
+      "location": [
+        8.626589093528732,
+        0.7532972356762011,
+        2.93354641284546
+      ],
+      "material": null,
+      "size": [
+        0.3006706537622197,
+        0.26958854334303817,
+        0.3316599017556743
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.012057705091410478,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.1506530965488182,
+      "surface_coverage": 0.10950933591802925,
+      "class_": "book",
+      "id": 111,
+      "location": [
+        9.407929948353265,
+        0.7623047549458228,
+        2.7173354276351858
+      ],
+      "material": null,
+      "size": [
+        0.44004163619991843,
+        0.2319721124830395,
+        0.1991226349766544
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.009833828214915952,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.4425353706589408,
+      "surface_coverage": 0.14026125919217997,
+      "class_": "book",
+      "id": 112,
+      "location": [
+        10.368078455133421,
+        0.7518123371931469,
+        2.7122087835885003
+      ],
+      "material": null,
+      "size": [
+        0.6109845864848769,
+        0.248157181736663,
+        0.29052225690146827
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.017112008217570907,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.9951646851811684,
+      "surface_coverage": 0.05225344531267596,
+      "class_": "book",
+      "id": 113,
+      "location": [
+        8.65537078761566,
+        0.7568517719824656,
+        3.251601779969013
+      ],
+      "material": null,
+      "size": [
+        0.3785452015707218,
+        0.258874905056514,
+        0.34665911623646695
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.00744762461075753,
+      "parent_room": 14
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.6136331615373813,
+      "surface_coverage": 0.19004626710159345,
+      "class_": "book",
+      "id": 114,
+      "location": [
+        3.3997655879552333,
+        -4.746223691803585,
+        3.6871781024735872
+      ],
+      "material": null,
+      "size": [
+        0.414190169710027,
+        0.6033927847138685,
+        0.3561549399168893
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.027540659417293327,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.7248375686190531,
+      "surface_coverage": 0.08009805141511292,
+      "class_": "book",
+      "id": 115,
+      "location": [
+        3.473070757065541,
+        -4.515275821006574,
+        4.746969936385664
+      ],
+      "material": null,
+      "size": [
+        0.2730065159355708,
+        0.15156505335729253,
+        0.26234009733586827
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.004139188000952975,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.67730728876174,
+      "surface_coverage": 0.028222758973209482,
+      "class_": "book",
+      "id": 116,
+      "location": [
+        3.4583513042090517,
+        -4.5013056431192195,
+        4.534565280919923
+      ],
+      "material": null,
+      "size": [
+        0.23778049283507485,
+        0.1841193362259883,
+        0.15261914432180212
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0015200307605541025,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.8771498278098406,
+      "surface_coverage": 0.0506412948697082,
+      "class_": "book",
+      "id": 117,
+      "location": [
+        3.472022533532102,
+        -4.720987926936871,
+        4.464441582479495
+      ],
+      "material": null,
+      "size": [
+        0.23642823697564053,
+        0.3094835069232067,
+        0.1747899534342494
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.003180750515559836,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.8684911555014814,
+      "surface_coverage": 0.05863576364283537,
+      "class_": "book",
+      "id": 118,
+      "location": [
+        3.46391586339798,
+        -5.04669205762219,
+        4.712307981734074
+      ],
+      "material": null,
+      "size": [
+        0.2484408183189455,
+        0.31957785715188347,
+        0.27270078091733474
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.006052561239250018,
+      "parent_room": 15
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.1590101468771792,
+      "surface_coverage": 0.1076627568033794,
+      "class_": "book",
+      "id": 119,
+      "location": [
+        9.574202639782975,
+        1.9906074566043281,
+        3.3181075123292
+      ],
+      "material": null,
+      "size": [
+        0.33859181753226864,
+        0.42804895273558285,
+        0.20907768753020495
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.009490558785407827,
+      "parent_room": 6
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 0.6337519261618021,
+      "surface_coverage": 0.026453298580807725,
+      "class_": "book",
+      "id": 120,
+      "location": [
+        9.745149957552753,
+        1.3231053577108964,
+        1.4701131622092836
+      ],
+      "material": null,
+      "size": [
+        0.22915975603170224,
+        0.14326523855804107,
+        0.23077773302630122
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.002677741176481586,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "open",
+        "close",
+        "read",
+        "borrow",
+        "lend"
+      ],
+      "floor_area": 1.0501919666724842,
+      "surface_coverage": 0.061951352085835104,
+      "class_": "book",
+      "id": 121,
+      "location": [
+        7.525061917940178,
+        5.675681908116001,
+        0.7304623300098567
+      ],
+      "material": null,
+      "size": [
+        0.261953782702979,
+        0.42934571624833584,
+        0.07883226914693198
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0022053092279409312,
+      "parent_room": 5
+    },
+    {
+      "action_affordance": [
+        "look at",
+        "set",
+        "hang",
+        "place"
+      ],
+      "floor_area": 1.9348088057228117,
+      "surface_coverage": 0.816103716943368,
+      "class_": "clock",
+      "id": 122,
+      "location": [
+        4.4021205924503795,
+        2.7101756801795696,
+        1.518129885113249
+      ],
+      "material": null,
+      "size": [
+        0.9409512053359261,
+        0.09357692603661327,
+        0.9528258656501967
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.045398425101270456,
+      "parent_room": 8
+    },
+    {
+      "action_affordance": [
+        "look at",
+        "set",
+        "hang",
+        "place"
+      ],
+      "floor_area": 0.9744371792894192,
+      "surface_coverage": 0.07613713466526192,
+      "class_": "clock",
+      "id": 123,
+      "location": [
+        -6.446666713505898,
+        -5.089652693943684,
+        1.8206019733917
+      ],
+      "material": null,
+      "size": [
+        0.46646404388428486,
+        0.09743582146977303,
+        0.3451652720348737
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0038272447766050334,
+      "parent_room": 16
+    },
+    {
+      "action_affordance": [
+        "fill",
+        "pick up",
+        "break",
+        "clean"
+      ],
+      "floor_area": 0.7113270008452972,
+      "surface_coverage": 0.18018016302404521,
+      "class_": "vase",
+      "id": 124,
+      "location": [
+        1.4704193667285026,
+        0.6454892990336546,
+        1.0966500789715665
+      ],
+      "material": null,
+      "size": [
+        0.21457716969578255,
+        0.2486465531686417,
+        0.4036019338447916
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.008098481457883406,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "fill",
+        "pick up",
+        "break",
+        "clean"
+      ],
+      "floor_area": 0.639648675351928,
+      "surface_coverage": 0.03571808502014804,
+      "class_": "vase",
+      "id": 125,
+      "location": [
+        1.2853310066228416,
+        0.817636423336061,
+        1.2555199758474105
+      ],
+      "material": null,
+      "size": [
+        0.230284984061069,
+        0.19781548983954722,
+        0.45730334802187866
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.004124098541000752,
+      "parent_room": 20
+    },
+    {
+      "action_affordance": [
+        "fill",
+        "pick up",
+        "break",
+        "clean"
+      ],
+      "floor_area": 0.3861172389823667,
+      "surface_coverage": 0.016209044511484267,
+      "class_": "vase",
+      "id": 126,
+      "location": [
+        -0.2201501690187937,
+        -2.3127415735043884,
+        1.001303395142131
+      ],
+      "material": null,
+      "size": [
+        0.13400543451109814,
+        0.11794127090532047,
+        0.14908008548553764
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0007204835081905985,
+      "parent_room": 13
+    },
+    {
+      "action_affordance": [
+        "fill",
+        "pick up",
+        "break",
+        "clean"
+      ],
+      "floor_area": 0.5955739472467302,
+      "surface_coverage": 0.09032800137905268,
+      "class_": "vase",
+      "id": 127,
+      "location": [
+        4.919233391144795,
+        2.4674011611384357,
+        4.000192663721301
+      ],
+      "material": null,
+      "size": [
+        0.2262446882932414,
+        0.1403241850515009,
+        0.2372928884865968
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.0037978613105922434,
+      "parent_room": 11
+    },
+    {
+      "action_affordance": [
+        "fill",
+        "pick up",
+        "break",
+        "clean"
+      ],
+      "floor_area": 0.9237325755187799,
+      "surface_coverage": 0.06781160367952048,
+      "class_": "vase",
+      "id": 128,
+      "location": [
+        9.234868947647591,
+        1.2175234914890274,
+        1.3786570546983332
+      ],
+      "material": null,
+      "size": [
+        0.323251399430843,
+        0.26311032599195316,
+        0.24804431950412775
+      ],
+      "tactile_texture": null,
+      "visual_texture": null,
+      "volume": 0.007645836062683702,
+      "parent_room": 5
+    }
+  ],
+  "rooms": [
+    {
+      "floor_area": 7.062150313874861,
+      "floor_number": "A",
+      "id": 1,
+      "location": [
+        2.6498999999999997,
+        1.8840350000000001,
+        1.1347385
+      ],
+      "scene_category": "bathroom",
+      "size": [
+        1.9655,
+        1.65251,
+        2.2864030000000004
+      ],
+      "volume": 7.216975000424926,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 17.96067290877198,
+      "floor_number": "A",
+      "id": 2,
+      "location": [
+        -0.8396049999999997,
+        3.5502500000000006,
+        1.6807194999999995
+      ],
+      "scene_category": "bathroom",
+      "size": [
+        5.5985700000000005,
+        5.0381800000000005,
+        3.5255009999999998
+      ],
+      "volume": 59.18467485270374,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 8.824413139223951,
+      "floor_number": "B",
+      "id": 3,
+      "location": [
+        3.006685,
+        4.511795,
+        4.121264999999999
+      ],
+      "scene_category": "bathroom",
+      "size": [
+        2.0993899999999996,
+        2.93929,
+        2.28127
+      ],
+      "volume": 10.100580489557244,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 8.163151806410015,
+      "floor_number": "B",
+      "id": 4,
+      "location": [
+        2.78165,
+        2.10994,
+        4.1207650000000005
+      ],
+      "scene_category": "bathroom",
+      "size": [
+        2.3097200000000004,
+        2.17692,
+        2.27441
+      ],
+      "volume": 8.928757895313703,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 19.71947390404577,
+      "floor_number": "A",
+      "id": 5,
+      "location": [
+        8.411954999999999,
+        3.5290300000000006,
+        2.1918810000000004
+      ],
+      "scene_category": "bedroom",
+      "size": [
+        5.18229,
+        4.9911,
+        4.409198000000001
+      ],
+      "volume": 83.85555140693454,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 17.752903782172393,
+      "floor_number": "B",
+      "id": 6,
+      "location": [
+        7.93416,
+        3.57397,
+        4.17945
+      ],
+      "scene_category": "bedroom",
+      "size": [
+        4.289480000000001,
+        5.053559999999999,
+        2.4904200000000003
+      ],
+      "volume": 49.5761381085839,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 12.155749990347138,
+      "floor_number": "A",
+      "id": 7,
+      "location": [
+        3.7976099999999997,
+        4.45731,
+        1.2771694999999996
+      ],
+      "scene_category": "corridor",
+      "size": [
+        4.44222,
+        2.0079000000000002,
+        2.5742609999999995
+      ],
+      "volume": 21.38305271906507,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 7.720103773355825,
+      "floor_number": "A",
+      "id": 8,
+      "location": [
+        4.70874,
+        1.869245,
+        1.1282539999999999
+      ],
+      "scene_category": "corridor",
+      "size": [
+        2.35336,
+        1.7869899999999999,
+        2.280272
+      ],
+      "volume": 8.391069002529779,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 10.539633506615793,
+      "floor_number": "A",
+      "id": 9,
+      "location": [
+        3.752605,
+        -0.8351850000000001,
+        1.1206195
+      ],
+      "scene_category": "corridor",
+      "size": [
+        2.7220100000000005,
+        3.85827,
+        2.285781
+      ],
+      "volume": 16.01959790723036,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 7.1228914835804105,
+      "floor_number": "B",
+      "id": 10,
+      "location": [
+        4.8922550000000005,
+        3.3412400000000004,
+        4.11841
+      ],
+      "scene_category": "corridor",
+      "size": [
+        2.01335,
+        1.8289,
+        2.2804400000000005
+      ],
+      "volume": 6.648524197574368,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 7.405829896820406,
+      "floor_number": "B",
+      "id": 11,
+      "location": [
+        4.894215,
+        1.4848630000000005,
+        4.11906
+      ],
+      "scene_category": "corridor",
+      "size": [
+        2.00815,
+        2.1920540000000006,
+        2.2723
+      ],
+      "volume": 7.23612043647126,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 18.593096945060157,
+      "floor_number": "B",
+      "id": 12,
+      "location": [
+        3.0017905000000003,
+        -0.8885999999999998,
+        5.01481
+      ],
+      "scene_category": "corridor",
+      "size": [
+        7.433919,
+        3.8475200000000003,
+        4.1289
+      ],
+      "volume": 62.278433459328404,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 16.159301976981006,
+      "floor_number": "A",
+      "id": 13,
+      "location": [
+        1.6293140000000002,
+        -3.7999650000000003,
+        1.34806
+      ],
+      "scene_category": "dining_room",
+      "size": [
+        4.354332,
+        4.67057,
+        2.7608999999999995
+      ],
+      "volume": 44.10400726848842,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 12.687793606650736,
+      "floor_number": "A",
+      "id": 14,
+      "location": [
+        9.250309999999999,
+        -0.29129399999999994,
+        2.5870645
+      ],
+      "scene_category": "home_office",
+      "size": [
+        4.78318,
+        2.447172,
+        5.688451
+      ],
+      "volume": 38.50637662281633,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 14.049539761582787,
+      "floor_number": "B",
+      "id": 15,
+      "location": [
+        1.8065579999999999,
+        -4.210084999999999,
+        4.21566
+      ],
+      "scene_category": "home_office",
+      "size": [
+        3.677244,
+        3.92895,
+        2.44434
+      ],
+      "volume": 32.257356298462085,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 6.837853989978917,
+      "floor_number": "A",
+      "id": 16,
+      "location": [
+        -6.298465,
+        -5.928685,
+        1.0731605000000004
+      ],
+      "scene_category": "kitchen",
+      "size": [
+        1.7681500000000003,
+        1.8447699999999996,
+        2.2888990000000002
+      ],
+      "volume": 6.290930613154728,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 18.905004754659675,
+      "floor_number": "A",
+      "id": 17,
+      "location": [
+        -2.8706275,
+        -4.54835,
+        2.3323560000000003
+      ],
+      "scene_category": "kitchen",
+      "size": [
+        5.4683850000000005,
+        5.86364,
+        4.764648
+      ],
+      "volume": 86.14101048007359,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 19.707443542263587,
+      "floor_number": "A",
+      "id": 18,
+      "location": [
+        6.792165,
+        -3.86766,
+        2.5130220000000003
+      ],
+      "scene_category": "living_room",
+      "size": [
+        6.31997,
+        4.96912,
+        5.661136
+      ],
+      "volume": 119.80925554861318,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 17.643177470681607,
+      "floor_number": "A",
+      "id": 19,
+      "location": [
+        -3.5099775,
+        -0.924315,
+        2.3138595
+      ],
+      "scene_category": "living_room",
+      "size": [
+        5.358085,
+        5.34635,
+        4.716261
+      ],
+      "volume": 69.96814332727753,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 14.842400017120946,
+      "floor_number": "A",
+      "id": 20,
+      "location": [
+        0.8147200000000003,
+        -0.06923499999999971,
+        1.667398
+      ],
+      "scene_category": "lobby",
+      "size": [
+        5.441940000000001,
+        3.6434300000000004,
+        3.364744
+      ],
+      "volume": 45.22955435924713,
+      "parent_building": 18
+    },
+    {
+      "floor_area": 11.216485832555241,
+      "floor_number": "A",
+      "id": 21,
+      "location": [
+        6.6586099999999995,
+        -0.2940259999999997,
+        2.5664685
+      ],
+      "scene_category": "staircase",
+      "size": [
+        3.3865599999999993,
+        2.4640280000000003,
+        5.705923
+      ],
+      "volume": 35.786980768566025,
+      "parent_building": 18
+    }
+  ]
+}
