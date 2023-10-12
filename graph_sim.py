@@ -2,6 +2,7 @@ import re
 import json
 import numpy as np
 import networkx as nx
+import matplotlib.pyplot as plt
 
 class GraphSim:
     """
@@ -134,13 +135,60 @@ class GraphSim:
 
         # visualization
         if self.debug:
-            import matplotlib.pyplot as plt
-            nx.draw(self.graph, with_labels=True)
+            pos = nx.spring_layout(self.graph, seed=7)
+            # pos = nx.nx_agraph.graphviz_layout(self.graph)
+            nx.draw(self.graph, pos, with_labels=True)
+            edge_labels = nx.get_edge_attributes(self.graph, "weight")
+            edge_labels = {key: np.round(value, decimals=2) for key, value in edge_labels.items()}
+            nx.draw_networkx_edge_labels(self.graph, pos, edge_labels)
             plt.show()
 
+    def calc_shortest_path_between_two_nodes(self, source_node, target_node):
+        if self.debug:
+            print('source_node: ', source_node)
+            print('target_ndoe: ', target_node)
+        if nx.has_path(self.graph, source=source_node, target=target_node):
+            shortest_path_length = nx.shortest_path_length(self.graph, source=source_node, target=target_node, weight='weight')
+            shortest_path_node_name_list = nx.shortest_path(self.graph, source=source_node, target=target_node)
+            if self.debug:
+                print('shortest_path_length: ', shortest_path_length)
+                print('shortest_path_node_name_list: ', shortest_path_node_name_list)
+            return shortest_path_length, shortest_path_node_name_list
+        else:
+            if self.debug:
+                print('no valid path, return inf and []')
+            return np.inf, []
+        
+    def calc_shortest_path_between_one_node_and_category(self, source_node, target_category):
+        if self.debug:
+            print('source_node: ', source_node)
+            print('target_category: ', target_category)
+        
+        # find target nodes that matches the category name in object or room list
+        target_nodes = [node_name for node_name in self.room_node_name_list if target_category == self.graph.nodes[node_name]['scene_category']]
+        target_nodes += [node_name for node_name in self.object_node_name_list if target_category == self.graph.nodes[node_name]['class_']]
+        if self.debug:
+            print('target_nodes: ', target_nodes)
+
+        shortest_path_list = []
+        for target_node_name in target_nodes:
+            shortest_path_pair = self.calc_shortest_path_between_two_nodes(source_node=source_node, target_node=target_node_name)
+            shortest_path_list.append(shortest_path_pair)
+        
+        # find the shortest "shortest path" among all target nodes
+        if len(shortest_path_list) > 0:
+            sorted_shortest_path_list = sorted(shortest_path_list, key=lambda x:x[0], reverse=False)
+            target_shortest_path_pair = sorted_shortest_path_list[0]
+            if self.debug:
+                print('target_shortest_path_pair: ', target_shortest_path_pair)
+            return target_shortest_path_pair
+        else:
+            return np.inf, []
 
 if __name__=='__main__':
     split = 'tiny_automated'
     scene_name = 'Allensville'
     scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
-    graph_sim = GraphSim(scene_text_path)
+    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbords=3, scene_name=scene_name, debug=True)
+    # graph_sim.calc_shortest_path_between_two_nodes(source_node='object_7', target_node='object_28')
+    graph_sim.calc_shortest_path_between_one_node_and_category(source_node='object_7', target_category='chair')
