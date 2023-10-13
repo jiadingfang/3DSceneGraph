@@ -184,6 +184,43 @@ class GraphSim:
             return target_shortest_path_pair
         else:
             return np.inf, []
+        
+    def interactive_category_finding(self, source_node, target_category):
+        if self.debug:
+            print('source_node: ', source_node)
+            print('target_category: ', target_category)
+        
+        travel_steps = 0
+        category_found = False
+        current_node = source_node
+        trajectory_list = [current_node]
+        trajectory_length = 0
+
+        while not category_found and travel_steps < 10:
+            neighbor_nodes = list(self.graph.successors(current_node))
+            print("=============================================================================")
+            print('The current place is {} with information {}'.format(current_node, self.graph.nodes[current_node]))
+            print('You have visted places {}: '.format(trajectory_list))
+            print('It has {} number of neighbors: '.format(len(neighbor_nodes)))
+            for i, neighbor_node in enumerate(neighbor_nodes):
+                print('The number {} neighbor place is {} with information {}'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node]))
+            next_id = int(input("Please input your desired place to do next from {}: ".format(list(range(1, 1 + len(neighbor_nodes))))))
+            next_node = neighbor_nodes[next_id - 1]
+            if next_node.startswith('object'):
+                category_found = target_category == self.graph.nodes[next_node]['class_']
+            else:
+                category_found = target_category == self.graph.nodes[next_node]['scene_category']
+            
+            trajectory_list.append(next_node)
+            trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
+
+            travel_steps += 1
+            current_node = next_node
+        
+        print('trajectory length: ', trajectory_length)
+        print('trajectory_list: ', trajectory_list)
+
+        return trajectory_length, trajectory_list
 
 if __name__=='__main__':
     split = 'tiny_automated'
@@ -192,3 +229,4 @@ if __name__=='__main__':
     graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbords=3, scene_name=scene_name, debug=True)
     # graph_sim.calc_shortest_path_between_two_nodes(source_node='object_7', target_node='object_28')
     graph_sim.calc_shortest_path_between_one_node_and_category(source_node='object_7', target_category='chair')
+    graph_sim.interactive_category_finding(source_node='object_7', target_category='chair')
