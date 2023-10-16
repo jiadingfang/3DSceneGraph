@@ -4,6 +4,8 @@ import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
 
+from llm_call import CompletionCall, ChatCompletionCall
+
 class GraphSim:
     """
     Scene graph structured as networkx object. Allows agent traversing as simulator.
@@ -31,8 +33,13 @@ class GraphSim:
             id = object_dict['id']
             node_name = 'room_{}'.format(id)
             self.graph.add_node(node_name, type='room')
-            for key, value in object_dict.items():
-                self.graph.nodes[node_name][key] = value
+            for key, value in object_dict.items():                
+                if isinstance(value, float):
+                    self.graph.nodes[node_name][key] = np.round(value, decimals=2)
+                elif key == 'location' or key == 'size':
+                    self.graph.nodes[node_name][key] = np.round(np.array(value), decimals=2)
+                else:
+                    self.graph.nodes[node_name][key] = value
             # initialize child_objects list
             self.graph.nodes[node_name]['child_objects'] = []
 
@@ -42,7 +49,12 @@ class GraphSim:
             node_name = 'object_{}'.format(id)
             self.graph.add_node(node_name, type='object')
             for key, value in object_dict.items():
-                self.graph.nodes[node_name][key] = value
+                if isinstance(value, float) or isinstance(value, np.ndarray):
+                    self.graph.nodes[node_name][key] = np.round(value, decimals=2)
+                elif key == 'location' or key == 'size':
+                    self.graph.nodes[node_name][key] = np.round(np.array(value), decimals=2)
+                else:
+                    self.graph.nodes[node_name][key] = value
                 
                 # add child objects information for each room
                 if key == 'parent_room':
@@ -68,7 +80,7 @@ class GraphSim:
                 room_b_location = np.array(room_node_b['location'])
                 distance_room_a_room_b = np.linalg.norm(room_a_location - room_b_location)
                 # print('distance_room_a_room_b: ', distance_room_a_room_b)
-                room_distance_dict[(room_name_a, room_name_b)] = distance_room_a_room_b
+                room_distance_dict[(room_name_a, room_name_b)] = np.round(distance_room_a_room_b, decimals=2)
             
             # filter out the top closest edges to add tothe graph
             sorted_room_distance_list = sorted(room_distance_dict.items(), key=lambda x:x[1], reverse=False)
@@ -221,6 +233,56 @@ class GraphSim:
         print('trajectory_list: ', trajectory_list)
 
         return trajectory_length, trajectory_list
+    
+    def llm_category_finding(self, source_node, target_category):
+        if self.debug:
+            print('source_node: ', source_node)
+            print('target_category: ', target_category)
+        
+        travel_steps = 0
+        category_found = False
+        current_node = source_node
+        trajectory_list = [current_node]
+        trajectory_length = 0
+
+        while not category_found and travel_steps < 10:
+            neighbor_nodes = list(self.graph.successors(current_node))
+            prompt = ""
+            prompt += "=============================================================================\n"
+            prompt += "You are travel in a new unknown environment, and your task is to find an object in the category '{}' with shortest path possible\n.".format(target_category)
+            prompt += 'You have visted places {}: \n'.format(trajectory_list)
+            prompt += 'The current place is {} with information {}\n'.format(current_node, self.graph.nodes[current_node])
+            prompt += 'It has {} number of neighbors: \n'.format(len(neighbor_nodes))
+            for i, neighbor_node in enumerate(neighbor_nodes):
+                prompt += 'The number {} neighbor place is {} with information {}\n'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node])
+            prompt += "Please answer your desired place to go next from the neghbor list of {}. Reason about it step by step. At the end of your reasoning, output the neighbor name with the format of a python dictionary with key 'choice' and value the name of chosen neighbor.".format(neighbor_nodes)
+
+            # import pdb; pdb.set_trace()
+
+            # response_text, llm_response = CompletionCall(prompt=prompt)
+            response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
+            # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
+
+            if self.debug:
+                print('prompt: ', prompt)
+                print('llm_response: ', llm_response)
+            
+            next_node = eval('{' + response_text.split('{')[1].split('}')[0] + '}')['choice']
+            if next_node.startswith('object'):
+                category_found = target_category == self.graph.nodes[next_node]['class_']
+            else:
+                category_found = target_category == self.graph.nodes[next_node]['scene_category']
+            
+            trajectory_list.append(next_node)
+            trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
+
+            travel_steps += 1
+            current_node = next_node
+        
+        print('trajectory length: ', trajectory_length)
+        print('trajectory_list: ', trajectory_list)
+
+        return trajectory_length, trajectory_list
 
 if __name__=='__main__':
     split = 'tiny_automated'
@@ -230,3 +292,5 @@ if __name__=='__main__':
     # graph_sim.calc_shortest_path_between_two_nodes(source_node='object_7', target_node='object_28')
     graph_sim.calc_shortest_path_between_one_node_and_category(source_node='object_7', target_category='chair')
     graph_sim.interactive_category_finding(source_node='object_7', target_category='chair')
+    # graph_sim.llm_category_finding(source_node='object_7', target_category='chair')
+    # graph_sim.calc_shortest_path_between_one_node_and_category(source_node='object_7', target_category='chair')
