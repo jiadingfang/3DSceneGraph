@@ -1,6 +1,8 @@
+import os
 import json
 import numpy as np
 import networkx as nx
+from datetime import datetime
 import matplotlib.pyplot as plt
 
 from llm_call import CompletionCall, ChatCompletionCall
@@ -108,12 +110,13 @@ class GraphSim:
             travel_steps += 1
             current_node = next_node
         
-        print('trajectory length: ', trajectory_length)
-        print('trajectory_list: ', trajectory_list)
+        if self.debug:
+            print('trajectory length: ', trajectory_length)
+            print('trajectory_list: ', trajectory_list)
 
         return trajectory_length, trajectory_list
     
-    def llm_category_finding(self, source_node, target_category):
+    def llm_category_finding(self, source_node, target_category, save=True):
         if self.debug:
             print('source_node: ', source_node)
             print('target_category: ', target_category)
@@ -124,8 +127,10 @@ class GraphSim:
         trajectory_list = [current_node]
         trajectory_length = 0
 
-        while not category_found and travel_steps < 10:
-            print("==============================================================")
+        if save:
+            save_list = []
+
+        while not category_found and travel_steps < 10:                
             neighbor_nodes = list(self.graph.successors(current_node))
             prompt = "You are travel in a new unknown environment."
             prompt += "The environment is represented as a graph."
@@ -144,7 +149,12 @@ class GraphSim:
             response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
             # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
 
+            if save:
+                save_list.append({'role':'user', 'content': prompt})
+                save_list.append({'role': 'assistant', 'content': response_text})
+
             if self.debug:
+                print("==============================================================")
                 print('prompt: ', prompt)
                 print('llm_response: ', llm_response)
             
@@ -159,9 +169,21 @@ class GraphSim:
 
             travel_steps += 1
             current_node = next_node
-        
-        print('trajectory length: ', trajectory_length)
-        print('trajectory_list: ', trajectory_list)
+
+        if self.debug:        
+            print('trajectory length: ', trajectory_length)
+            print('trajectory_list: ', trajectory_list)
+
+        if save:
+            save_dir = 'logs'
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
+            save_name = 'log_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
+            json_object = json.dumps(save_list, indent=4)
+            with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
+                # json.dumps(save_list, json_file)
+                json_file.write(json_object)
 
         return trajectory_length, trajectory_list
 
