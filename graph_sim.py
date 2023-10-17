@@ -146,8 +146,8 @@ class GraphSim:
             # import pdb; pdb.set_trace()
 
             # response_text, llm_response = CompletionCall(prompt=prompt)
-            response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
-            # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
+            # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
+            response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
 
             if save_dir is not None:
                 save_list.append({'role':'user', 'content': prompt})
@@ -158,14 +158,20 @@ class GraphSim:
                 print('prompt: ', prompt)
                 print('llm_response: ', llm_response)
             
-            next_node = eval('{' + response_text.split('{')[1].split('}')[0] + '}')['choice']
-            if next_node.startswith('object'):
-                category_found = target_category == self.graph.nodes[next_node]['class_']
-            else:
-                category_found = target_category == self.graph.nodes[next_node]['scene_category']
-            
-            trajectory_list.append(next_node)
-            trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
+            # try getting answer from llm response
+            try:
+                next_node = eval('{' + response_text.split('{')[1].split('}')[0] + '}')['choice']
+                if next_node.startswith('object'):
+                    category_found = target_category == self.graph.nodes[next_node]['class_']
+                else:
+                    category_found = target_category == self.graph.nodes[next_node]['scene_category']
+                trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
+                trajectory_list.append(next_node)
+
+            except Exception as e:
+                if self.debug:
+                    print('llm running error: ', e)
+                return np.inf, trajectory_list
 
             travel_steps += 1
             current_node = next_node
@@ -203,9 +209,8 @@ class GraphSim:
         log_dict['llm_shortest_path_trajectory'] = llm_shortest_path_trajectory
 
         # SPL(Success weighted by (normalized inverse) Path Length), https://arxiv.org/pdf/1807.06757.pdf
-        # TODO: weighted by success indicator
         spl_by_distance = gt_shortest_path_length / llm_shortest_path_length
-        spl_by_steps = len(gt_shortest_path_trajectory) / len(llm_shortest_path_trajectory)
+        spl_by_steps = len(gt_shortest_path_trajectory) / len(llm_shortest_path_trajectory) if not np.isinf(llm_shortest_path_length) else 0.0
         log_dict['spl_by_distance'] = spl_by_distance
         log_dict['spl_by_steps'] = spl_by_steps
 
@@ -232,4 +237,4 @@ if __name__=='__main__':
     # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
     # print('llm shortest path length: ', llm_shortest_path_pair[0])
     # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
-    graph_sim.run_one_sample(source_node='room_9', target_category='chair', save_dir='runs')
+    graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
