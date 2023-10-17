@@ -116,7 +116,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def llm_category_finding(self, source_node, target_category, save=True):
+    def llm_category_finding(self, source_node, target_category, save_dir=None):
         if self.debug:
             print('source_node: ', source_node)
             print('target_category: ', target_category)
@@ -127,7 +127,7 @@ class GraphSim:
         trajectory_list = [current_node]
         trajectory_length = 0
 
-        if save:
+        if save_dir is not None:
             save_list = []
 
         while not category_found and travel_steps < 10:                
@@ -149,7 +149,7 @@ class GraphSim:
             response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
             # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
 
-            if save:
+            if save_dir is not None:
                 save_list.append({'role':'user', 'content': prompt})
                 save_list.append({'role': 'assistant', 'content': response_text})
 
@@ -174,28 +174,62 @@ class GraphSim:
             print('trajectory length: ', trajectory_length)
             print('trajectory_list: ', trajectory_list)
 
-        if save:
-            save_dir = 'logs'
+        if save_dir is not None:
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
             timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
-            save_name = 'log_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
+            save_name = 'llm_responses_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
             json_object = json.dumps(save_list, indent=4)
             with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
                 # json.dumps(save_list, json_file)
                 json_file.write(json_object)
 
         return trajectory_length, trajectory_list
+    
+    def run_one_sample(self, source_node, target_category, save_dir=None):
+
+        if self.debug:
+            print('source node: ', source_node)
+            print('target category: ', target_category)
+
+        gt_shortest_path_length, gt_shortest_path_trajectory = self.calc_shortest_path_between_one_node_and_category(source_node=source_node, target_category=target_category)
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category)
+
+        # calculate metrics
+        log_dict = {}
+        log_dict['gt_shortest_path_length'] = gt_shortest_path_length
+        log_dict['gt_shortest_path_trajectory'] = gt_shortest_path_trajectory
+        log_dict['llm_shortest_path_length'] = llm_shortest_path_length
+        log_dict['llm_shortest_path_trajectory'] = llm_shortest_path_trajectory
+
+        # SPL(Success weighted by (normalized inverse) Path Length), https://arxiv.org/pdf/1807.06757.pdf
+        # TODO: weighted by success indicator
+        spl_by_distance = gt_shortest_path_length / llm_shortest_path_length
+        spl_by_steps = len(gt_shortest_path_trajectory) / len(llm_shortest_path_trajectory)
+        log_dict['spl_by_distance'] = spl_by_distance
+        log_dict['spl_by_steps'] = spl_by_steps
+
+        if save_dir is not None:
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
+            save_name = 'run_log_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
+            json_object = json.dumps(log_dict, indent=4)
+            with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
+                # json.dumps(save_list, json_file)
+                json_file.write(json_object)
+
 
 if __name__=='__main__':
     split = 'tiny_automated'
     scene_name = 'Allensville'
     scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
-    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=False)
-    gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
+    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=True)
+    # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
     # graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
-    llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair')
-    print('gt shortest path length: ', gt_shortest_path_pair[0])
-    print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
-    print('llm shortest path length: ', llm_shortest_path_pair[0])
-    print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
+    # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
+    # print('gt shortest path length: ', gt_shortest_path_pair[0])
+    # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
+    # print('llm shortest path length: ', llm_shortest_path_pair[0])
+    # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
+    graph_sim.run_one_sample(source_node='room_9', target_category='chair', save_dir='runs')
