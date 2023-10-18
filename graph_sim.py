@@ -111,6 +111,10 @@ class GraphSim:
 
             travel_steps += 1
             current_node = next_node
+
+        # if category object not found, return inf path length
+        if not category_found:
+            return np.inf, trajectory_list
         
         if self.debug:
             print('trajectory length: ', trajectory_length)
@@ -182,6 +186,10 @@ class GraphSim:
 
             travel_steps += 1
             current_node = next_node
+
+        # if category object not found, return inf path length
+        if not category_found:
+            return np.inf, trajectory_list
 
         if self.debug:        
             print('trajectory length: ', trajectory_length)
