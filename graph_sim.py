@@ -206,6 +206,11 @@ class GraphSim:
             print('target category: ', target_category)
 
         gt_shortest_path_length, gt_shortest_path_trajectory = self.calc_shortest_path_between_one_node_and_category(source_node=source_node, target_category=target_category)
+
+        # if there exists no gt shortest path, return None
+        if np.isinf(gt_shortest_path_length): 
+            return None, None
+            
         llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, model='gpt-4')
 
         # calculate metrics
@@ -255,8 +260,9 @@ class GraphSim:
 
             spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, save_dir='runs')
 
-            spl_by_distance_list.append(spl_by_distance)
-            spl_by_steps_list.append(spl_by_steps)
+            if spl_by_distance is not None:
+                spl_by_distance_list.append(spl_by_distance)
+                spl_by_steps_list.append(spl_by_steps)
 
         return spl_by_distance_list, spl_by_steps_list
 
@@ -278,11 +284,11 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, debug=
         split_spl_by_distance_list.extend(spl_by_distance_list)
         split_spl_by_steps_list.extend(spl_by_steps_list)
 
-    split_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
-    split_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
+    total_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
+    total_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
     print('split: ', split_name)
-    print('split_spl_by_distance_mean: ', split_spl_by_distance_mean)
-    print('split_spl_by_steps_mean: ', split_spl_by_steps_mean)
+    print('total_spl_by_distance_mean: ', total_spl_by_distance_mean)
+    print('total_spl_by_steps_mean: ', total_spl_by_steps_mean)
 
 
 if __name__=='__main__':
@@ -304,7 +310,7 @@ if __name__=='__main__':
     # print('spl_by_distance_mean: ', spl_by_distance_mean)
     # print('spl_by_steps_mean: ', spl_by_steps_mean)
     split_name = 'tiny_automated'
-    n_samples_per_scene = 1
-    n_neighbors = 4
+    n_samples_per_scene = 2
+    n_neighbors = 3
     debug = True
     run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, debug=debug)
