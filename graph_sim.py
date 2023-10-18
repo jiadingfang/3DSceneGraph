@@ -205,7 +205,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def run_one_sample(self, source_node, target_category, llm_steps_max_adaptive=True, save_dir=None):
+    def run_one_sample(self, source_node, target_category, llm_model='gpt-4', llm_steps_max_adaptive=True, save_dir=None):
 
         if self.debug:
             print('source node: ', source_node)
@@ -219,11 +219,11 @@ class GraphSim:
         
         # if use adaptive llm_steps_max, then set the limit to be double the length of gt shortest path steps
         if llm_steps_max_adaptive:
-            llm_steps_max = min(20, 2 * len(gt_shortest_path_trajectory))
+            llm_steps_max = min(15, int(1.5 * len(gt_shortest_path_trajectory)))
         else:
             llm_steps_max = 10
 
-        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model='gpt-4', save_dir=save_dir)
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model=llm_model, save_dir=save_dir)
 
         # calculate metrics
         log_dict = {}
@@ -250,7 +250,7 @@ class GraphSim:
 
         return spl_by_distance, spl_by_steps
 
-    def sampling_tests_for_scene(self, n_samples=None, llm_steps_max_adaptive=True, save_dir=None):
+    def sampling_tests_for_scene(self, n_samples=None, llm_model='gpt-4', llm_steps_max_adaptive=True, save_dir=None):
         object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
         object_category_list = sorted(list(set([self.graph.nodes[object_node]['class_'] for object_node in object_node_name_list])))
         n_categories = len(object_category_list)
@@ -270,7 +270,7 @@ class GraphSim:
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
             
-            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir=os.path.join(save_dir, 'source_node-{}_target_category-{}'.format(sample_room_name, sample_target_category)))
+            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir=os.path.join(save_dir, 'source_node-{}_target_category-{}'.format(sample_room_name, sample_target_category)))
 
             if spl_by_distance is not None:
                 spl_by_distance_list.append(spl_by_distance)
@@ -278,7 +278,7 @@ class GraphSim:
 
         return spl_by_distance_list, spl_by_steps_list
 
-def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_steps_max_adaptive=True, debug=False):
+def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_model='gpt-4', llm_steps_max_adaptive=True, debug=False):
     split_dir = 'scene_text/{}'.format(split_name)
     scene_filename_list = os.listdir(split_dir)
     # scene_filename_list = ['Newfields.scn']
@@ -288,15 +288,18 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_st
         scene_name = scene_filename.split('.')[0]
         print('scene_name: ', scene_name)
         scene_text_path = os.path.join(split_dir, scene_filename)
-        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
-        spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='logs/{}/{}'.format(split_name, scene_name))
-        spl_by_distance_mean = np.array(spl_by_distance_list).mean()
-        spl_by_steps_mean = np.array(spl_by_steps_list).mean()
-        print('spl_by_distance_mean: ', spl_by_distance_mean)
-        print('spl_by_steps_mean: ', spl_by_steps_mean)
+        try:
+            graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
+            spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='logs/split_{}-model_{}-neighbors_{}/{}'.format(split_name, llm_model, n_neighbors, scene_name))
+            spl_by_distance_mean = np.array(spl_by_distance_list).mean()
+            spl_by_steps_mean = np.array(spl_by_steps_list).mean()
+            print('spl_by_distance_mean: ', spl_by_distance_mean)
+            print('spl_by_steps_mean: ', spl_by_steps_mean)
 
-        split_spl_by_distance_list.extend(spl_by_distance_list)
-        split_spl_by_steps_list.extend(spl_by_steps_list)
+            split_spl_by_distance_list.extend(spl_by_distance_list)
+            split_spl_by_steps_list.extend(spl_by_steps_list)
+        except Exception as e:
+            print('Scene {} graph invalid. Skip.'.format(scene_name)) 
 
     total_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
     total_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
@@ -323,9 +326,11 @@ if __name__=='__main__':
     # spl_by_steps_mean = np.array(spl_by_steps_list).mean()
     # print('spl_by_distance_mean: ', spl_by_distance_mean)
     # print('spl_by_steps_mean: ', spl_by_steps_mean)
-    split_name = 'tiny_automated'
-    n_samples_per_scene = 1
-    n_neighbors = 3
+    # split_name = 'tiny_automated'
+    split_name = 'medium_automated'
+    n_samples_per_scene = 5
+    n_neighbors = 4
+    llm_model = 'gpt-4'
     llm_steps_max_adaptive = True
-    debug = True
-    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
+    debug = False
+    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
