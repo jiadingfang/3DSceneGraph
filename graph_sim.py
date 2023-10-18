@@ -122,7 +122,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def llm_category_finding(self, source_node, target_category, model='gpt-4', save_dir=None):
+    def llm_category_finding(self, source_node, target_category, model='gpt-4', llm_steps_max=10, save_dir=None):
         if self.debug:
             print('source_node: ', source_node)
             print('target_category: ', target_category)
@@ -136,7 +136,7 @@ class GraphSim:
         if save_dir is not None:
             save_list = []
 
-        while not category_found and travel_steps < 10:                
+        while not category_found and travel_steps < llm_steps_max:                
             neighbor_nodes = list(self.graph.successors(current_node))
             prompt = "You are travel in a new unknown environment."
             prompt += "The environment is represented as a graph."
@@ -207,7 +207,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def run_one_sample(self, source_node, target_category, save_dir=None):
+    def run_one_sample(self, source_node, target_category, llm_steps_max_adaptive=True, save_dir=None):
 
         if self.debug:
             print('source node: ', source_node)
@@ -215,11 +215,17 @@ class GraphSim:
 
         gt_shortest_path_length, gt_shortest_path_trajectory = self.calc_shortest_path_between_one_node_and_category(source_node=source_node, target_category=target_category)
 
-        # if there exists no gt shortest path, return None
+        # if there exists no gt shortest path, skip this sample, return None
         if np.isinf(gt_shortest_path_length): 
             return None, None
-            
-        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, model='gpt-4')
+        
+        # if use adaptive llm_steps_max, then set the limit to be double the length of gt shortest path steps
+        if llm_steps_max_adaptive:
+            llm_steps_max = min(20, 2 * len(gt_shortest_path_trajectory))
+        else:
+            llm_steps_max = 10
+
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model='gpt-4')
 
         # calculate metrics
         log_dict = {}
@@ -246,7 +252,7 @@ class GraphSim:
 
         return spl_by_distance, spl_by_steps
 
-    def sampling_tests_for_scene(self, n_samples=None):
+    def sampling_tests_for_scene(self, n_samples=None, llm_steps_max_adaptive=True):
         object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
         object_category_list = sorted(list(set([self.graph.nodes[object_node]['class_'] for object_node in object_node_name_list])))
         n_categories = len(object_category_list)
@@ -266,7 +272,7 @@ class GraphSim:
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
 
-            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, save_dir='runs')
+            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='runs')
 
             if spl_by_distance is not None:
                 spl_by_distance_list.append(spl_by_distance)
@@ -274,7 +280,7 @@ class GraphSim:
 
         return spl_by_distance_list, spl_by_steps_list
 
-def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, debug=False):
+def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_steps_max_adaptive=True, debug=False):
     split_dir = 'scene_text/{}'.format(split_name)
     # scene_name_list = os.listdir(split_dir)
     scene_name_list = ['Newfields.scn']
@@ -282,7 +288,7 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, debug=
     for scene_name in scene_name_list:
         print('scene_name: ', scene_name.split('.')[0])
         scene_text_path = os.path.join(split_dir, scene_name)
-        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
+        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
         spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene)
         spl_by_distance_mean = np.array(spl_by_distance_list).mean()
         spl_by_steps_mean = np.array(spl_by_steps_list).mean()
@@ -320,5 +326,6 @@ if __name__=='__main__':
     split_name = 'tiny_automated'
     n_samples_per_scene = 2
     n_neighbors = 3
+    llm_steps_max_adaptive = True
     debug = True
-    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, debug=debug)
+    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
