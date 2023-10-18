@@ -149,8 +149,6 @@ class GraphSim:
                 prompt += 'The number {} neighbor place is {} with information {}\n'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node])
             prompt += "Please answer your desired place to go next from the neghbor list of {}. Reason about it step by step. At the end of your reasoning, output the neighbor name with the format of a python dictionary with key 'choice' and value the name of chosen neighbor.".format(neighbor_nodes)
 
-            # import pdb; pdb.set_trace()
-
             if model == 'gpt-3.5-turbo-instruct':
                 response_text, llm_response = CompletionCall(prompt=prompt)
             elif model == 'gpt-4':
@@ -187,6 +185,16 @@ class GraphSim:
             travel_steps += 1
             current_node = next_node
 
+        if save_dir is not None:
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
+            timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
+            save_name = 'llm_responses_{}.json'.format(timestamp)
+            json_object = json.dumps(save_list, indent=4)
+            with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
+                # json.dumps(save_list, json_file)
+                json_file.write(json_object)
+
         # if category object not found, return inf path length
         if not category_found:
             return np.inf, trajectory_list
@@ -194,16 +202,6 @@ class GraphSim:
         if self.debug:        
             print('trajectory length: ', trajectory_length)
             print('trajectory_list: ', trajectory_list)
-
-        if save_dir is not None:
-            if not os.path.exists(save_dir):
-                os.makedirs(save_dir)
-            timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
-            save_name = 'llm_responses_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
-            json_object = json.dumps(save_list, indent=4)
-            with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
-                # json.dumps(save_list, json_file)
-                json_file.write(json_object)
 
         return trajectory_length, trajectory_list
     
@@ -225,7 +223,7 @@ class GraphSim:
         else:
             llm_steps_max = 10
 
-        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model='gpt-4')
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model='gpt-4', save_dir=save_dir)
 
         # calculate metrics
         log_dict = {}
@@ -244,7 +242,7 @@ class GraphSim:
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
             timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
-            save_name = 'run_log_scene_name_{}_source_node_{}_target_category_{}_{}.json'.format(self.scene_name, source_node, target_category, timestamp)
+            save_name = 'metrics_{}.json'.format(timestamp)
             json_object = json.dumps(log_dict, indent=4)
             with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
                 # json.dumps(save_list, json_file)
@@ -252,7 +250,7 @@ class GraphSim:
 
         return spl_by_distance, spl_by_steps
 
-    def sampling_tests_for_scene(self, n_samples=None, llm_steps_max_adaptive=True):
+    def sampling_tests_for_scene(self, n_samples=None, llm_steps_max_adaptive=True, save_dir=None):
         object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
         object_category_list = sorted(list(set([self.graph.nodes[object_node]['class_'] for object_node in object_node_name_list])))
         n_categories = len(object_category_list)
@@ -271,8 +269,8 @@ class GraphSim:
             sample_room_name = room_node_name_list[sample_id]
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
-
-            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='runs')
+            
+            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir=os.path.join(save_dir, 'source_node-{}_target_category-{}'.format(sample_room_name, sample_target_category)))
 
             if spl_by_distance is not None:
                 spl_by_distance_list.append(spl_by_distance)
@@ -282,14 +280,16 @@ class GraphSim:
 
 def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_steps_max_adaptive=True, debug=False):
     split_dir = 'scene_text/{}'.format(split_name)
-    # scene_name_list = os.listdir(split_dir)
-    scene_name_list = ['Newfields.scn']
+    scene_filename_list = os.listdir(split_dir)
+    # scene_filename_list = ['Newfields.scn']
+    # scene_filename_list = ['Klickitat.scn']
     split_spl_by_distance_list, split_spl_by_steps_list = [], []
-    for scene_name in scene_name_list:
-        print('scene_name: ', scene_name.split('.')[0])
-        scene_text_path = os.path.join(split_dir, scene_name)
-        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
-        spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene)
+    for scene_filename in scene_filename_list:
+        scene_name = scene_filename.split('.')[0]
+        print('scene_name: ', scene_name)
+        scene_text_path = os.path.join(split_dir, scene_filename)
+        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
+        spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='logs/{}/{}'.format(split_name, scene_name))
         spl_by_distance_mean = np.array(spl_by_distance_list).mean()
         spl_by_steps_mean = np.array(spl_by_steps_list).mean()
         print('spl_by_distance_mean: ', spl_by_distance_mean)
@@ -324,7 +324,7 @@ if __name__=='__main__':
     # print('spl_by_distance_mean: ', spl_by_distance_mean)
     # print('spl_by_steps_mean: ', spl_by_steps_mean)
     split_name = 'tiny_automated'
-    n_samples_per_scene = 2
+    n_samples_per_scene = 1
     n_neighbors = 3
     llm_steps_max_adaptive = True
     debug = True
