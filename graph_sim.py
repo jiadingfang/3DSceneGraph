@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+np.random.seed(42)
 import networkx as nx
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -116,7 +117,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def llm_category_finding(self, source_node, target_category, save_dir=None):
+    def llm_category_finding(self, source_node, target_category, model='gpt-4', save_dir=None):
         if self.debug:
             print('source_node: ', source_node)
             print('target_category: ', target_category)
@@ -145,10 +146,15 @@ class GraphSim:
 
             # import pdb; pdb.set_trace()
 
-            # response_text, llm_response = CompletionCall(prompt=prompt)
-            # response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
-            response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
-
+            if model == 'gpt-3.5-turbo-instruct':
+                response_text, llm_response = CompletionCall(prompt=prompt)
+            elif model == 'gpt-4':
+                response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
+            elif model == 'gpt-3.5-turbo':
+                response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
+            else:
+                raise NotImplementedError('model {} not implemented. Choose from gpt-3.5-turbo-instruct, gpt-3.5-turbo and gpt-4.'.format(model))
+            
             if save_dir is not None:
                 save_list.append({'role':'user', 'content': prompt})
                 save_list.append({'role': 'assistant', 'content': response_text})
@@ -199,7 +205,7 @@ class GraphSim:
             print('target category: ', target_category)
 
         gt_shortest_path_length, gt_shortest_path_trajectory = self.calc_shortest_path_between_one_node_and_category(source_node=source_node, target_category=target_category)
-        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category)
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, model='gpt-4')
 
         # calculate metrics
         log_dict = {}
@@ -224,12 +230,32 @@ class GraphSim:
                 # json.dumps(save_list, json_file)
                 json_file.write(json_object)
 
+    def sampling_tests_for_scene(self, n_samples=None):
+        object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
+        object_category_list = sorted(list(set([self.graph.nodes[object_node]['class_'] for object_node in object_node_name_list])))
+        n_categories = len(object_category_list)
+        room_node_name_list = [node_name for node_name in self.graph.nodes if 'room' in node_name]
+
+        # sample source nodes from room list
+        n_total = len(room_node_name_list)
+        if n_samples is not None:
+            sample_list = np.random.choice(n_total, n_samples, replace=False)
+        else:
+            sample_list = list(range(n_total))
+
+        # sample target_cateory from object list
+        for sample_id in sample_list:
+            sample_room_name = room_node_name_list[sample_id]
+            sample_category_id = np.random.choice(n_categories, 1)[0]
+            sample_target_category = object_category_list[sample_category_id]
+
+            self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, save_dir='runs')
 
 if __name__=='__main__':
     split = 'tiny_automated'
     scene_name = 'Allensville'
     scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
-    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=True)
+    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=False)
     # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
     # graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
     # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
@@ -237,4 +263,5 @@ if __name__=='__main__':
     # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
     # print('llm shortest path length: ', llm_shortest_path_pair[0])
     # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
-    graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
+    # graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
+    graph_sim.sampling_tests_for_scene(n_samples=1)
