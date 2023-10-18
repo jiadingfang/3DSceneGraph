@@ -180,6 +180,15 @@ class GraphSim:
             except Exception as e:
                 if self.debug:
                     print('llm running error: ', e)
+                if save_dir is not None:
+                    if not os.path.exists(save_dir):
+                        os.makedirs(save_dir)
+                    timestamp = datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
+                    save_name = 'llm_responses_{}.json'.format(timestamp)
+                    json_object = json.dumps(save_list, indent=4)
+                    with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
+                        # json.dumps(save_list, json_file)
+                        json_file.write(json_object)
                 return np.inf, trajectory_list
 
             travel_steps += 1
