@@ -1,5 +1,6 @@
 import os
 import json
+import tqdm
 import numpy as np
 np.random.seed(42)
 import networkx as nx
@@ -35,7 +36,7 @@ class GraphSim:
     def calc_shortest_path_between_two_nodes(self, source_node, target_node):
         if self.debug:
             print('source_node: ', source_node)
-            print('target_ndoe: ', target_node)
+            print('target_node: ', target_node)
         if nx.has_path(self.graph, source=source_node, target=target_node):
             shortest_path_length = nx.shortest_path_length(self.graph, source=source_node, target=target_node, weight='weight')
             shortest_path_node_name_list = nx.shortest_path(self.graph, source=source_node, target=target_node)
@@ -215,8 +216,8 @@ class GraphSim:
         log_dict['llm_shortest_path_trajectory'] = llm_shortest_path_trajectory
 
         # SPL(Success weighted by (normalized inverse) Path Length), https://arxiv.org/pdf/1807.06757.pdf
-        spl_by_distance = gt_shortest_path_length / llm_shortest_path_length
-        spl_by_steps = len(gt_shortest_path_trajectory) / len(llm_shortest_path_trajectory) if not np.isinf(llm_shortest_path_length) else 0.0
+        spl_by_distance = gt_shortest_path_length / np.maximum(gt_shortest_path_length, llm_shortest_path_length)
+        spl_by_steps = len(gt_shortest_path_trajectory) / np.maximum(len(gt_shortest_path_trajectory), len(llm_shortest_path_trajectory)) if not np.isinf(llm_shortest_path_length) else 0.0
         log_dict['spl_by_distance'] = spl_by_distance
         log_dict['spl_by_steps'] = spl_by_steps
 
@@ -229,6 +230,8 @@ class GraphSim:
             with open(os.path.join(save_dir, save_name), 'w', encoding ='utf8') as json_file: 
                 # json.dumps(save_list, json_file)
                 json_file.write(json_object)
+
+        return spl_by_distance, spl_by_steps
 
     def sampling_tests_for_scene(self, n_samples=None):
         object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
@@ -244,24 +247,64 @@ class GraphSim:
             sample_list = list(range(n_total))
 
         # sample target_cateory from object list
-        for sample_id in sample_list:
+        spl_by_distance_list, spl_by_steps_list = [], []
+        for sample_id in tqdm.tqdm(sample_list):
             sample_room_name = room_node_name_list[sample_id]
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
 
-            self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, save_dir='runs')
+            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, save_dir='runs')
+
+            spl_by_distance_list.append(spl_by_distance)
+            spl_by_steps_list.append(spl_by_steps)
+
+        return spl_by_distance_list, spl_by_steps_list
+
+def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, debug=False):
+    split_dir = 'scene_text/{}'.format(split_name)
+    # scene_name_list = os.listdir(split_dir)
+    scene_name_list = ['Newfields.scn']
+    split_spl_by_distance_list, split_spl_by_steps_list = [], []
+    for scene_name in scene_name_list:
+        print('scene_name: ', scene_name.split('.')[0])
+        scene_text_path = os.path.join(split_dir, scene_name)
+        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
+        spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene)
+        spl_by_distance_mean = np.array(spl_by_distance_list).mean()
+        spl_by_steps_mean = np.array(spl_by_steps_list).mean()
+        print('spl_by_distance_mean: ', spl_by_distance_mean)
+        print('spl_by_steps_mean: ', spl_by_steps_mean)
+
+        split_spl_by_distance_list.extend(spl_by_distance_list)
+        split_spl_by_steps_list.extend(spl_by_steps_list)
+
+    split_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
+    split_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
+    print('split: ', split_name)
+    print('split_spl_by_distance_mean: ', split_spl_by_distance_mean)
+    print('split_spl_by_steps_mean: ', split_spl_by_steps_mean)
+
 
 if __name__=='__main__':
-    split = 'tiny_automated'
-    scene_name = 'Allensville'
-    scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
-    graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=False)
-    # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
-    # graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
-    # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
-    # print('gt shortest path length: ', gt_shortest_path_pair[0])
-    # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
-    # print('llm shortest path length: ', llm_shortest_path_pair[0])
-    # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
-    # graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
-    graph_sim.sampling_tests_for_scene(n_samples=1)
+    # split = 'tiny_automated'
+    # scene_name = 'Allensville'
+    # scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
+    # graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=False)
+    # # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
+    # # graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
+    # # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
+    # # print('gt shortest path length: ', gt_shortest_path_pair[0])
+    # # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
+    # # print('llm shortest path length: ', llm_shortest_path_pair[0])
+    # # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
+    # # graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
+    # spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=2)
+    # spl_by_distance_mean = np.array(spl_by_distance_list).mean()
+    # spl_by_steps_mean = np.array(spl_by_steps_list).mean()
+    # print('spl_by_distance_mean: ', spl_by_distance_mean)
+    # print('spl_by_steps_mean: ', spl_by_steps_mean)
+    split_name = 'tiny_automated'
+    n_samples_per_scene = 1
+    n_neighbors = 4
+    debug = True
+    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, debug=debug)
