@@ -149,15 +149,17 @@ class GraphSim:
                 prompt += 'The number {} neighbor place is {} with information {}\n'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node])
             prompt += "Please answer your desired place to go next from the neghbor list of {}. Reason about it step by step. At the end of your reasoning, output the neighbor name with the format of a python dictionary with key 'choice' and value the name of chosen neighbor.".format(neighbor_nodes)
 
-            if model == 'gpt-3.5-turbo-instruct':
-                response_text, llm_response = CompletionCall(prompt=prompt)
-            elif model == 'gpt-4':
-                response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
-            elif model == 'gpt-3.5-turbo':
-                response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
-            else:
-                raise NotImplementedError('model {} not implemented. Choose from gpt-3.5-turbo-instruct, gpt-3.5-turbo and gpt-4.'.format(model))
+            # if model == 'gpt-3.5-turbo-instruct':
+            #     response_text, llm_response = CompletionCall(prompt=prompt)
+            # elif model == 'gpt-4':
+            #     response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-4')
+            # elif model == 'gpt-3.5-turbo':
+            #     response_text, llm_response = ChatCompletionCall(prompt=prompt, model='gpt-3.5-turbo')
+            # else:
+            #     raise NotImplementedError('model {} not implemented. Choose from gpt-3.5-turbo-instruct, gpt-3.5-turbo and gpt-4.'.format(model))
             
+            response_text, llm_response = ChatCompletionCall(prompt=prompt, model=model)
+
             if save_dir is not None:
                 save_list.append({'role':'user', 'content': prompt})
                 save_list.append({'role': 'assistant', 'content': response_text})
@@ -335,11 +337,14 @@ if __name__=='__main__':
     # spl_by_steps_mean = np.array(spl_by_steps_list).mean()
     # print('spl_by_distance_mean: ', spl_by_distance_mean)
     # print('spl_by_steps_mean: ', spl_by_steps_mean)
-    # split_name = 'tiny_automated'
-    split_name = 'medium_automated'
+    split_name = 'tiny_automated'
+    # split_name = 'medium_automated'
     n_samples_per_scene = 5
     n_neighbors = 4
     llm_model = 'gpt-4'
+    # llm_model = 'gpt-3.5-turbo'
+    # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3' # llm_response
+    # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc' # llm_correct
     llm_steps_max_adaptive = True
     debug = False
     run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
