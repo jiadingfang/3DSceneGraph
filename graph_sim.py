@@ -310,7 +310,7 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_mo
             split_spl_by_distance_list.extend(spl_by_distance_list)
             split_spl_by_steps_list.extend(spl_by_steps_list)
         except Exception as e:
-            print('Scene {} graph invalid. Skip.'.format(scene_name)) 
+            print('Scene {} graph invalid with error {}. Skip.'.format(scene_name, e)) 
 
     total_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
     total_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
@@ -341,7 +341,8 @@ if __name__=='__main__':
     # split_name = 'medium_automated'
     n_samples_per_scene = 5
     n_neighbors = 4
-    llm_model = 'gpt-4'
+    # llm_model = 'gpt-4-0613'
+    llm_model = 'gpt-4-1106-preview'
     # llm_model = 'gpt-3.5-turbo'
     # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3' # llm_response
     # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc' # llm_correct
