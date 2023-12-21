@@ -324,28 +324,64 @@ if __name__=='__main__':
     # scene_name = 'Allensville'
     # scene_text_path = 'scene_text/{}/{}.scn'.format(split, scene_name)
     # graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=3, scene_name=scene_name, debug=False)
-    # # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
-    # # graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
-    # # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
-    # # print('gt shortest path length: ', gt_shortest_path_pair[0])
-    # # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
-    # # print('llm shortest path length: ', llm_shortest_path_pair[0])
-    # # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
-    # # graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
-    # spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=2)
-    # spl_by_distance_mean = np.array(spl_by_distance_list).mean()
-    # spl_by_steps_mean = np.array(spl_by_steps_list).mean()
-    # print('spl_by_distance_mean: ', spl_by_distance_mean)
-    # print('spl_by_steps_mean: ', spl_by_steps_mean)
-    split_name = 'tiny_automated'
-    # split_name = 'medium_automated'
-    n_samples_per_scene = 5
-    n_neighbors = 4
-    # llm_model = 'gpt-4-0613'
-    llm_model = 'gpt-4-1106-preview'
-    # llm_model = 'gpt-3.5-turbo'
-    # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3' # llm_response
-    # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc' # llm_correct
-    llm_steps_max_adaptive = True
-    debug = False
-    run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
+    # gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node='room_11', target_category='chair')
+    # user_shortest_path_pair = graph_sim.interactive_category_finding(source_node='room_11', target_category='chair')
+    # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node='room_11', target_category='chair', save_dir='llm_responses')
+    # print('gt shortest path length: ', gt_shortest_path_pair[0])
+    # print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
+    # print('user shortest path length: ', user_shortest_path_pair[0])
+    # print('user shortest path trajectory: ', user_shortest_path_pair[1])
+    # print('llm shortest path length: ', llm_shortest_path_pair[0])
+    # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
+
+    # # # graph_sim.run_one_sample(source_node='room_11', target_category='chair', save_dir='runs')
+    # # spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=2)
+    # # spl_by_distance_mean = np.array(spl_by_distance_list).mean()
+    # # spl_by_steps_mean = np.array(spl_by_steps_list).mean()
+    # # print('spl_by_distance_mean: ', spl_by_distance_mean)
+    # # print('spl_by_steps_mean: ', spl_by_steps_mean)
+    # split_name = 'tiny_automated'
+    # # split_name = 'medium_automated'
+    # n_samples_per_scene = 5
+    # n_neighbors = 4
+    # # llm_model = 'gpt-4-0613'
+    # llm_model = 'gpt-4-1106-preview'
+    # # llm_model = 'gpt-3.5-turbo'
+    # # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3' # llm_response
+    # # llm_model = 'ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc' # llm_correct
+    # llm_steps_max_adaptive = True
+    # debug = False
+    # # run_tests_for_split(split_name=split_name, n_samples_per_scene=n_samples_per_scene, n_neighbors=n_neighbors, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, debug=debug)
+
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--split_name', type=str, default='tiny_automated')
+    parser.add_argument('--n_samples_per_scene', type=int, default=5)
+    parser.add_argument('--n_neighbors', type=int, default=4)
+    parser.add_argument('--llm_model', type=str, default='gpt-4-0613')
+    parser.add_argument('--llm_steps_max_adaptive', type=bool, default=True)
+    parser.add_argument('--debug', type=bool, default=False)
+    parser.add_argument('--llm_eval', action='store_true')
+    parser.add_argument('--interactive', action='store_true')
+    parser.add_argument('--scene_name', type=str, default='Allensville') # only useful for interactive mode
+    parser.add_argument('--source_node', type=str, default='room_11') # only useful for interactive mode
+    parser.add_argument('--target_category', type=str, default='chair') # only useful for interactive mode
+    parser.add_argument('--save_dir', type=str, default='temp') # only useful for interactive mode
+    args = parser.parse_args()
+    if args.llm_eval:
+        run_tests_for_split(split_name=args.split_name, n_samples_per_scene=args.n_samples_per_scene, n_neighbors=args.n_neighbors, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, debug=args.debug)
+    elif args.interactive:
+        graph_sim = GraphSim(scene_text_path='scene_text/{}/{}.scn'.format(args.split_name, args.scene_name), n_neighbors=args.n_neighbors, scene_name=args.scene_name, debug=args.debug)
+        gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node=args.source_node, target_category=args.target_category)
+        user_shortest_path_pair = graph_sim.interactive_category_finding(source_node=args.source_node, target_category=args.target_category)
+        # llm_shortest_path_pair = graph_sim.llm_category_finding(source_node=args.source_node, target_category=args.target_category, save_dir=args.save_dir)
+        print('gt shortest path length: ', gt_shortest_path_pair[0])
+        print('gt shortest path trajectory: ', gt_shortest_path_pair[1])
+        print('user shortest path length: ', user_shortest_path_pair[0])
+        print('user shortest path trajectory: ', user_shortest_path_pair[1])
+        # print('llm shortest path length: ', llm_shortest_path_pair[0])
+        # print('llm shortest path trajectory: ', llm_shortest_path_pair[1])
+    else:
+        print('please choose between llm_eval and interactive mode')
+
+

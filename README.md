@@ -4,6 +4,9 @@ This is the code repo for the project that test indoor goal-finding capabilities
 ## Install
 > pip install -r requirements.txt
 
+## Setup OAI API
+> export OPENAI_API_KEY=xxxxxxxxxxxxxxxxxxxxx
+
 ## Data
 For original 3D scene graph data, visit [https://github.com/StanfordVL/3DSceneGraph](https://github.com/StanfordVL/3DSceneGraph)
 
@@ -21,7 +24,17 @@ The following are brief discriptions of some important files or directories:
 
 
 ## Evaluation
+### Evaluation with LLMs
 Run
-> python graph_sim.py
+> python graph_sim.py --llm_eval
 
-There are opions like `split_name`, `llm_model`, `n_samples_per_scene`, `n_neighbors` that you can alter. Will make them in argparse later.
+There are opions like `split_name`, `llm_model`, `n_samples_per_scene`, `n_neighbors` that you can alter. 
+Eval results can be found in `logs` directory.
+
+### Interactive Mode
+If you want to run 
+> python graph_sim.py --interactive
+
+The output will show the gt shortest path length and trajectory versus user shortest path length and trajectory.
+
+TODO: save user interactive data
