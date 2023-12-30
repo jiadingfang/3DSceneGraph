@@ -30,14 +30,14 @@ def generate_diagram_from_text_output(text: str):
                                       shape='box', style='filled', fillcolor='lightgreen',
                                       z=float(node_position[1] * 200))
         else:
-            # floor_plan_graph.add_node(node_name_and_attr,
-            #                           pos=f'{float(node_position[0] * 900)},{float((node_position[1]*10)**3)}',
-            #                           shape='box', style='filled', fillcolor='lightblue', z=float((node_position[1]*10)**3))
-
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 200)},{float(node_position[1] * 200)}',
-                                      shape='box', style='filled', fillcolor='lightblue',
-                                      z=float(node_position[1] * 200))
+                                      pos=f'{float(node_position[0] * 900)},{float((node_position[1]*10)**3)}',
+                                      shape='box', style='filled', fillcolor='lightblue', z=float((node_position[1]*10)**3))
+
+            # floor_plan_graph.add_node(node_name_and_attr,
+            #                           pos=f'{float(node_position[0] * 200)},{float(node_position[1] * 200)}',
+            #                           shape='box', style='filled', fillcolor='lightblue',
+            #                           z=float(node_position[1] * 200))
 
     center_node = get_node_name_and_attr(node_list[0], node_attr_dict)
     g_node = floor_plan_graph.get_node(center_node)
@@ -50,7 +50,7 @@ def generate_diagram_from_text_output(text: str):
             floor_plan_graph.add_edge(center_node, leaf)
 
     # Render the UML diagram
-    output_file = "floor_plan_diagram2.pdf"
+    output_file = "floor_plan_diagram.pdf"
     floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="pdf")
 
     # G.write("miles.dot")
