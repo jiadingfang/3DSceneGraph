@@ -50,8 +50,8 @@ def generate_diagram_from_text_output(text: str):
             floor_plan_graph.add_edge(center_node, leaf)
 
     # Render the UML diagram
-    output_file = "floor_plan_diagram.pdf"
-    floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="pdf")
+    output_file = "generated_images/floor_plan_diagram.png"
+    floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
 
     # G.write("miles.dot")
     # print("Wrote miles.dot")
