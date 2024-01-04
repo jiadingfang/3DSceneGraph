@@ -1,5 +1,5 @@
-from graph_info_helper import *
 import pygraphviz as pgv
+from generate_floor_plan_diagram.graph_info_helper import *
 
 test_text = """
     The current place is room_11 with information {'type': 'room', 'floor_area': 7.66, 'floor_number': 'A', 'id': 11, 'location': array([ 0.23, -0.02,  1.23]), 'scene_category': 'lobby', 'size': array([2.36, 1.97, 2.45]), 'volume': 9.15, 'parent_building': 2}
@@ -31,8 +31,8 @@ def generate_diagram_from_text_output(text: str):
                                       z=float(node_position[1] * 200))
         else:
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 900)},{float((node_position[1]*10)**3)}',
-                                      shape='box', style='filled', fillcolor='lightblue', z=float((node_position[1]*10)**3))
+                                      pos=f'{float(node_position[0] * 900)},{float((node_position[1]*10)**2)}',
+                                      shape='box', style='filled', fillcolor='lightblue', z=float((node_position[1]*10)**2))
 
             # floor_plan_graph.add_node(node_name_and_attr,
             #                           pos=f'{float(node_position[0] * 200)},{float(node_position[1] * 200)}',
@@ -49,8 +49,16 @@ def generate_diagram_from_text_output(text: str):
             leaf = get_node_name_and_attr(node, node_attr_dict)
             floor_plan_graph.add_edge(center_node, leaf)
 
+    # floor_plan_graph.layout(layout="sfdp",beautify=true)
+    # Set layout to 'sfdp'
+    # floor_plan_graph.layout(prog='sfdp')
+
+    # Apply beautification options
+    floor_plan_graph.graph_attr.update(beautify=True)
+
+
     # Render the UML diagram
-    output_file = "generated_images/floor_plan_diagram.png"
+    output_file = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"
     floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
 
     # G.write("miles.dot")
@@ -59,6 +67,7 @@ def generate_diagram_from_text_output(text: str):
     # print("Wrote miles.png")
 
     print(f"UML Class diagram generated: {output_file}")
+
 
 
 if __name__ == '__main__':
