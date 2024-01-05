@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from graph_sim import GraphSim
 from generate_floor_plan_diagram.generate_diagram import generate_diagram_from_text_output
 from generate_floor_plan_diagram.graph_info_helper import *
+import _pickle as pickle
 
 
 class GraphSimPanel(GraphSim):
@@ -61,12 +62,9 @@ class InteractivePanel:
         self.frame_up.pack()
         self.frame_mid = tk.Frame(self.root, width=self.desired_width, height=500)
         self.frame_mid.pack()
-        self.frame_low = tk.Frame(self.root, width=self.desired_width, height=300)
+        self.frame_low = tk.Frame(self.root, width=self.desired_width, height=700)
         self.frame_low.pack()
 
-        # self.scrollbar = tk.Scrollbar(self.frame_up, orient=tk.VERTICAL)
-        # self.scrollbar.config(command=self.floorplan_image_label.yview)
-        # self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)  # 靠右摆放, fill整个纵向
         # Initialization
         self.initialization()
 
@@ -75,6 +73,20 @@ class InteractivePanel:
         according_width= int((self.desired_height/original_height) * original_width)
         image = image.resize((according_width, self.desired_height))
         return image
+
+    def record_result(self):
+        global result_dir
+        result_dir['user_success'] = self.success
+        result_dir['user_path_length'] = self.trajectory_length
+        result_dir['user_path_trajectory'] = self.trajectory_history
+        result_dir['user_steps'] = self.travel_step
+
+        file_name = 'generate_floor_plan_diagram/results/'+result_dir['user_name']+'_result.txt'
+        with open(file_name, 'a') as file:
+            file.write(str(result_dir))
+            file.write('\n')
+
+        file.close()
 
 
     def initialization(self):
@@ -145,9 +157,6 @@ class InteractivePanel:
             floorplan_image = Image.open(floorplan_image_path)
             # Calculate the new height based on the specified width
             floorplan_image = self.resize_image(floorplan_image)
-            # original_width, original_height = floorplan_image.size
-            # according_height = int((self.desired_width / original_width) * original_height)
-            # floorplan_image = floorplan_image.resize((self.desired_width, according_height))
             floorplan_image = ImageTk.PhotoImage(floorplan_image)
             self.floorplan_image_label.configure(image=floorplan_image)
             self.floorplan_image_label.image = floorplan_image
@@ -157,7 +166,9 @@ class InteractivePanel:
             self.greeting.configure(text=f"Sorry, you didn't find {self.target_category} in time!", fg='red', font=20)
             self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
             self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
-            return
+            self.record_result()
+
+            return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
 
         if 'object' in button_text:
             self.success = (self.graph_sim.graph.nodes[button_text]['class_'] == self.target_category)
@@ -170,11 +181,7 @@ class InteractivePanel:
 
                 floorplan_image_path = "generate_floor_plan_diagram/generated_images/success.png"  # Change this to your initial PNG file path
                 floorplan_image = Image.open(floorplan_image_path)
-                # Calculate the new height based on the specified width
                 floorplan_image = self.resize_image(floorplan_image)
-                # original_width, original_height = floorplan_image.size
-                # according_height = int((self.desired_width / original_width) * original_height)
-                # floorplan_image = floorplan_image.resize((self.desired_width, according_height))
                 floorplan_image = ImageTk.PhotoImage(floorplan_image)
                 self.floorplan_image_label.configure(image=floorplan_image)
                 self.floorplan_image_label.image = floorplan_image
@@ -184,7 +191,28 @@ class InteractivePanel:
                 self.greeting.configure(text=f"You've found {self.target_category} successfully!", fg='red', font=20)
                 self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
                 self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
-                return
+
+                self.record_result()
+                return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
+
+            else:
+                floorplan_image_path = "generate_floor_plan_diagram/generated_images/fail.png"  # Change this to your initial PNG file path
+                floorplan_image = Image.open(floorplan_image_path)
+                floorplan_image = self.resize_image(floorplan_image)
+                floorplan_image = ImageTk.PhotoImage(floorplan_image)
+                self.floorplan_image_label.configure(image=floorplan_image)
+                self.floorplan_image_label.image = floorplan_image
+                for button in self.buttons_manager:
+                    button.destroy()
+
+                self.greeting.configure(text=f"Sorry, you found the wrong item, we need {self.target_category}!", fg='red',
+                                        font=20)
+                self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
+                self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
+
+                self.record_result()
+                return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
+
 
         # generate the first diagram
         scene_output_text = self.graph_sim.panel_scene_text(current_node=button_text)
@@ -217,6 +245,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('--user_name', type=str, default='luzhe')
     parser.add_argument('--split_name', type=str, default='tiny_automated')
     parser.add_argument('--n_samples_per_scene', type=int, default=5)
     parser.add_argument('--n_neighbors', type=int, default=4)
@@ -229,11 +258,19 @@ if __name__ == '__main__':
     parser.add_argument('--save_dir', type=str, default='temp')  # only useful for interactive mode
     args = parser.parse_args()
 
+    result_dir = {'user_name': args.user_name,
+                  'scene_name': args.scene_name,
+                  'source_node': args.source_node,
+                  'target_category': args.target_category}
+
     graph_sim = GraphSimPanel(scene_text_path='scene_text/{}/{}.scn'.format(args.split_name, args.scene_name),
                               n_neighbors=args.n_neighbors, scene_name=args.scene_name, debug=args.debug)
 
     gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node=args.source_node,
                                                                                        target_category=args.target_category)
+
+    result_dir['gt_shortest_path_length'] = gt_shortest_path_pair[0]
+    result_dir['gt_shortest_path_trajectory'] = gt_shortest_path_pair[1]
 
     panel = InteractivePanel(graph_sim=graph_sim,
                              MAX_STEP=10,
@@ -242,101 +279,4 @@ if __name__ == '__main__':
 
     panel.run()
 
-# # Function to update the interface based on different options
-# def update_interface(option=None):
-#     global success
-#     if success:
-#         # Already succeeded, no need to choose options
-#         show_success_image("test_images/success.png")
-#         return
-#     else:
-#         if option == 1:
-#             # Implement logic for Option 1 here
-#             update_left_with_new_image("test_images/dog.jpg", ["Option 3", "Option 4"])
-#         elif option == 2:
-#             # Implement logic for Option 2 here
-#             update_left_with_new_image("test_images/cat.jpg", ["Option 5", "Option 6"])
-#         else:
-#             # Implement logic for other options here
-#             update_left_with_new_image("test_images/rabbit.jpg", ["Option 1", "Option 2"])
 
-
-# # Function to show success image
-# def show_success_image(image_path):
-#     global success
-#     success = True  # Update success status
-#     success_image = Image.open(image_path)
-#     success_image = success_image.resize((100, 100))  # Resize success image
-#     success_image = ImageTk.PhotoImage(success_image)
-#     success_image_label.configure(image=success_image)
-#     success_image_label.image = success_image
-#     success_image_label.pack()
-#     # Hide the other image label
-#     image_label.pack_forget()
-#     # Repack buttons for options after success
-#     add_option_buttons()
-
-
-# # Function to update the left side with a new image and options
-# def update_left_with_new_image(image_path, new_options):
-#     global option_buttons
-#     # Load and display a new image
-#     image = Image.open(image_path)
-#     image = image.resize((desired_width, desired_height))  # Resize the image
-#     resized_image = ImageTk.PhotoImage(image)
-#     image_label.configure(image=resized_image)
-#     image_label.image = resized_image
-#     image_label.pack()
-#     # Destroy existing option buttons if present
-#     destroy_option_buttons()
-#     # Create new buttons for updated options
-#     create_option_buttons(new_options)
-#
-#
-# # Function to destroy existing option buttons
-# def destroy_option_buttons():
-#     global option_buttons
-#     for button in option_buttons:
-#         button.destroy()
-#     option_buttons = []
-
-
-# Function to create buttons for different options
-# def create_option_buttons(options):
-#     global option_buttons
-#     # Creating buttons for different options
-#     for option_text in options:
-#         button = tk.Button(root, text=option_text, command=lambda text=option_text: update_interface_text(text))
-#         button.pack(pady=5)
-#         option_buttons.append(button)
-
-
-# # Function to update interface based on the selected text
-# def update_interface_text(text):
-#     global success
-#     # Implement logic based on selected text
-#     if text == "Option 1":
-#         # Update interface for Option 1
-#         update_interface(1)
-#     elif text == "Option 2":
-#         # Update interface for Option 2
-#         update_interface(2)
-#     elif text == "Option 3":
-#         # Update interface for Option 3
-#         update_interface(3)
-#     elif text == "Option 4":
-#         # Update interface for Option 4
-#         update_interface(4)
-#     elif text == "Option 5":
-#         # Update interface for Option 5
-#         update_interface(5)
-#     elif text == "Option 6":
-#         # Update interface for Option 6
-#         update_interface(6)
-#
-#
-# # Function to add buttons for options
-# def add_option_buttons():
-#     if not success:
-#         # Creating buttons for default options
-#         create_option_buttons(["Option 1", "Option 2"])

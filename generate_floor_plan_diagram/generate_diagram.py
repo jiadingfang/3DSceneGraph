@@ -20,26 +20,20 @@ def generate_diagram_from_text_output(text: str):
     node_list, node_attr_dict = graph_info_helper(text)
     # Create a new graph
     floor_plan_graph = pgv.AGraph(strict=False, directed=False)
+    center_node = get_node_name_and_attr(node_list[0], node_attr_dict)
 
     for node in node_list:
         node_name_and_attr = get_node_name_and_attr(node, node_attr_dict)
         node_position = get_node_pos(node, node_attr_dict)
         if node_is_room(node, node_attr_dict):
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 200)},{float(node_position[1] * 200)}',
-                                      shape='box', style='filled', fillcolor='lightgreen',
-                                      z=float(node_position[1] * 200))
+                                      pos=f'{float(node_position[0] * 150)},{float(node_position[1] * 150)}',
+                                      shape='box', style='filled', fillcolor='lightgreen')
         else:
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 900)},{float((node_position[1]*10)**2)}',
-                                      shape='box', style='filled', fillcolor='lightblue', z=float((node_position[1]*10)**2))
+                                      pos=f'{float((node_position[0] ** 1) * 200)},{float((node_position[1] ** 1) * 200)}',
+                                      shape='box', style='filled', fillcolor='lightblue')
 
-            # floor_plan_graph.add_node(node_name_and_attr,
-            #                           pos=f'{float(node_position[0] * 200)},{float(node_position[1] * 200)}',
-            #                           shape='box', style='filled', fillcolor='lightblue',
-            #                           z=float(node_position[1] * 200))
-
-    center_node = get_node_name_and_attr(node_list[0], node_attr_dict)
     g_node = floor_plan_graph.get_node(center_node)
     g_node.attr['root'] = True
     g_node.attr['fillcolor'] = 'pink'
@@ -50,29 +44,24 @@ def generate_diagram_from_text_output(text: str):
             floor_plan_graph.add_edge(center_node, leaf)
 
     # floor_plan_graph.layout(layout="sfdp",beautify=true)
-    # Set layout to 'sfdp'
-    # floor_plan_graph.layout(prog='sfdp')
 
     # Apply beautification options
-    floor_plan_graph.graph_attr.update(beautify=True)
+    # floor_plan_graph.graph_attr.update(beautify=True)
 
+    # Set graph attributes
+    floor_plan_graph.graph_attr['layout'] = 'neato'
+    floor_plan_graph.graph_attr['splines'] = 'true'
+    floor_plan_graph.graph_attr['overlap'] = 'false'
+    floor_plan_graph.graph_attr['constraint'] = 'false'
 
     # Render the UML diagram
     output_file = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"
-    floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
+    # floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
+    floor_plan_graph.draw(output_file, prog="neato", args='-n1', format="png")
 
-    # G.write("miles.dot")
-    # print("Wrote miles.dot")
-    # G.draw("miles.png", prog="neato", args="-n2")
-    # print("Wrote miles.png")
 
     print(f"UML Class diagram generated: {output_file}")
 
 
-
 if __name__ == '__main__':
     generate_diagram_from_text_output(test_text)
-
-# # Render the UML diagram
-# output_file = "uml_class_diagram.png"
-# uml_graph.draw(output_file, prog="dot", format="png")

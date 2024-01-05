@@ -49,8 +49,15 @@ def get_node_name_and_attr(node_name: str, node_dict: dict) -> str:
     attr_str = replace_array_pattern(attr_str)
     attr_dict = eval(attr_str)
     res_str = node_name + '\n'
-    for key, value in attr_dict.items():
-        res_str += key + ": " + str(value) + '\n'
+    if attr_dict['type'] == 'room':
+        for key, value in attr_dict.items():
+            if key not in ['size', 'id', 'parent_building', 'location', 'type', 'volume']:
+                res_str += key + ": " + str(value) + '\n'
+    else:
+        res_str += "class_ : " + str(attr_dict['class_']) + '\n'
+        # res_str += "location : " + str(attr_dict['location']) + '\n'
+        res_str += "material : " + str(attr_dict['material']) + '\n'
+        res_str += "volume : " + "{:.4f}".format(attr_dict['size'][0]*attr_dict['size'][1]*attr_dict['size'][2]) + '\n'
     return res_str
 
 
