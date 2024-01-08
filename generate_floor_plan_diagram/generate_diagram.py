@@ -31,7 +31,7 @@ def generate_diagram_from_text_output(text: str):
                                       shape='box', style='filled', fillcolor='lightgreen')
         else:
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float((node_position[0] ** 1) * 30)},{float((node_position[1] ** 1) * 30)}',
+                                      pos=f'{float((node_position[0] ** 1) * 15)},{float((node_position[1] ** 1) * 15)}',
                                       shape='box', style='filled', fillcolor='lightblue')
 
     g_node = floor_plan_graph.get_node(center_node)

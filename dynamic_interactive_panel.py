@@ -57,7 +57,7 @@ class InteractivePanel:
 
         # Desired width and height for the displayed image
         self.desired_width = 1000
-        self.desired_height = 800
+        self.desired_height = 700
 
         self.frame_up = tk.Frame(self.root, width=self.desired_width, height=1000)
         self.frame_up.pack()
@@ -71,8 +71,12 @@ class InteractivePanel:
 
     def resize_image(self, image: Image):
         original_width, original_height = image.size
-        according_width= int((self.desired_height/original_height) * original_width)
-        image = image.resize((according_width, self.desired_height))
+        if original_width > 1.5 * original_height:
+            according_height = int((self.desired_width / original_width) * original_height)
+            image = image.resize((self.desired_width, according_height))
+        else:
+            according_width = int((self.desired_height/original_height) * original_width)
+            image = image.resize((according_width, self.desired_height))
         return image
 
     def record_result(self):
@@ -83,7 +87,7 @@ class InteractivePanel:
         result_dir['user_steps'] = self.travel_step
 
         spl_by_distance = int(self.success) * float(result_dir['gt_shortest_path_length']) / self.trajectory_length
-        spl_by_steps = int(self.success) * float(len(result_dir['gt_shortest_path_trajectory'])) / (self.travel_step+1)
+        spl_by_steps = int(self.success) * float(len(result_dir['gt_shortest_path_trajectory'])) / self.travel_step
 
         result_dir['spl_by_distance'] = spl_by_distance
         result_dir['spl_by_steps'] = spl_by_steps
@@ -104,7 +108,7 @@ class InteractivePanel:
 
     def initialization(self):
         self.trajectory_history.append(self.source_node)
-        self.travel_step = 0
+        self.travel_step = 1
         self.trajectory_length = 0
 
         # generate the first diagram
@@ -149,8 +153,8 @@ class InteractivePanel:
         for index, neig in enumerate(neighbor_list):
             button = tk.Button(self.frame_low, text=neig,
                                command=lambda button_text=neig: self.update_interface(button_text))
-            c = int(index % 4)
-            r = int(index / 4)
+            c = int(index % 5)
+            r = int(index / 5)
             button.grid(row=r, column=c)
             self.buttons_manager.append(button)
 
