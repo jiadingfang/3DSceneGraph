@@ -1,3 +1,4 @@
+import numpy as np
 import pygraphviz as pgv
 from generate_floor_plan_diagram.graph_info_helper import *
 
@@ -26,12 +27,21 @@ def generate_diagram_from_text_output(text: str):
         node_name_and_attr = get_node_name_and_attr(node, node_attr_dict)
         node_position = get_node_pos(node, node_attr_dict)
         if node_is_room(node, node_attr_dict):
+            x = np.clip(float((node_position[0] ** 1) * 10), -500, 500)
+            y = np.clip(float((node_position[1] ** 1) * 10), -300, 300)
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 10)},{float(node_position[1] * 10)}',
+                                      pos=f'{x},{y}',
+                                      # pos=f'{float(node_position[0] * 10)},{float(node_position[1] * 10)}',
                                       shape='box', style='filled', fillcolor='lightgreen')
         else:
+            w, h = get_node_size(node, node_attr_dict)
+            x = np.clip(float((node_position[0] ** 1) * 15), -500, 500)
+            y = np.clip(float((node_position[1] ** 1) * 15), -300,300)
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float((node_position[0] ** 1) * 15)},{float((node_position[1] ** 1) * 15)}',
+                                      pos = f'{x},{y}',
+                                      # pos=f'{float((node_position[0] ** 1) * 15)},{float((node_position[1] ** 1) * 15)}',
+                                      width = np.clip(w,1,10),
+                                      height = np.clip(h,1,10),
                                       shape='box', style='filled', fillcolor='lightblue')
 
     g_node = floor_plan_graph.get_node(center_node)

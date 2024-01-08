@@ -59,12 +59,12 @@ def get_node_name_and_attr(node_name: str, node_dict: dict) -> str:
     else:
         if attr_dict['type'] == 'room':
             for key, value in attr_dict.items():
-                if key not in ['size', 'id', 'parent_building', 'location', 'type', 'volume']:
+                if key not in ['size', 'id', 'parent_building', 'location', 'type', 'volume', 'floor_area']:
                     res_str += key + ": " + str(value) + '\n'
         else:
             res_str += "class_ : " + str(attr_dict['class_']) + '\n'
-            res_str += "material : " + str(attr_dict['material']) + '\n'
-            res_str += "volume : " + "{:.4f}".format(attr_dict['size'][0]*attr_dict['size'][1]*attr_dict['size'][2]) + '\n'
+            # res_str += "material : " + str(attr_dict['material']) + '\n'
+            # res_str += "volume : " + "{:.4f}".format(attr_dict['size'][0]*attr_dict['size'][1]*attr_dict['size'][2]) + '\n'
 
     return res_str
 
@@ -78,6 +78,17 @@ def get_node_pos(node_name: str, node_dict: dict):
         return attr_dict['location']
     except KeyError:
         print("No location information")
+
+
+def get_node_size(node_name: str, node_dict: dict):
+    attr_str = node_dict[node_name]
+    attr_str = replace_array_pattern(attr_str)
+    attr_dict = eval(attr_str)
+    assert 'size' in attr_dict.keys()
+    try:
+        return attr_dict['size'][0], attr_dict['size'][1]
+    except KeyError:
+        print("No size information")
 
 
 def node_is_object(node_name: str, node_dict: dict):
