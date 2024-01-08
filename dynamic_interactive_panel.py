@@ -4,6 +4,7 @@ from graph_sim import GraphSim
 from generate_floor_plan_diagram.generate_diagram import generate_diagram_from_text_output
 from generate_floor_plan_diagram.graph_info_helper import *
 import _pickle as pickle
+import os
 
 
 class GraphSimPanel(GraphSim):
@@ -81,7 +82,19 @@ class InteractivePanel:
         result_dir['user_path_trajectory'] = self.trajectory_history
         result_dir['user_steps'] = self.travel_step
 
-        file_name = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}_{result_dir["source_node"]}_to_{result_dir["target_category"]}'+'_result.txt'
+        spl_by_distance = int(self.success) * float(result_dir['gt_shortest_path_length']) / self.trajectory_length
+        spl_by_steps = int(self.success) * float(len(result_dir['gt_shortest_path_trajectory'])) / (self.travel_step+1)
+
+        result_dir['spl_by_distance'] = spl_by_distance
+        result_dir['spl_by_steps'] = spl_by_steps
+
+        path = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}'
+        # Check whether the specified path exists or not
+        isExist = os.path.exists(path)
+        if not isExist:
+            os.makedirs(path)
+
+        file_name = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}/{result_dir["source_node"]}_to_{result_dir["target_category"]}'+'.txt'
         with open(file_name, 'a') as file:
             file.write(str(result_dir))
             file.write('\n')
@@ -246,15 +259,15 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--user_name', type=str, default='luzhe')
-    parser.add_argument('--split_name', type=str, default='tiny_automated')
+    parser.add_argument('--split_name', type=str, default='medium_automated')
     parser.add_argument('--n_samples_per_scene', type=int, default=5)
     parser.add_argument('--n_neighbors', type=int, default=4)
     parser.add_argument('--llm_model', type=str, default='gpt-4-0613')
     parser.add_argument('--llm_steps_max_adaptive', type=bool, default=True)
     parser.add_argument('--debug', type=bool, default=False)
-    parser.add_argument('--scene_name', type=str, default='Allensville')  # only useful for interactive mode
-    parser.add_argument('--source_node', type=str, default='room_11')  # only useful for interactive mode
-    parser.add_argument('--target_category', type=str, default='sink')  # only useful for interactive mode
+    parser.add_argument('--scene_name', type=str, default='Annona')  # only useful for interactive mode
+    parser.add_argument('--source_node', type=str, default='room_4')  # only useful for interactive mode
+    parser.add_argument('--target_category', type=str, default='couch')  # only useful for interactive mode
     parser.add_argument('--save_dir', type=str, default='temp')  # only useful for interactive mode
     args = parser.parse_args()
 

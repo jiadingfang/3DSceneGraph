@@ -32,9 +32,14 @@ There are opions like `split_name`, `llm_model`, `n_samples_per_scene`, `n_neigh
 Eval results can be found in `logs` directory.
 
 ### Interactive Mode
-If you want to run 
+You could run 
 > python graph_sim.py --interactive
 
-The output will show the gt shortest path length and trajectory versus user shortest path length and trajectory.
+to enter a text interactive mode. The output will show the gt shortest path length and trajectory versus user shortest path length and trajectory.
+You could also run 
+> python dynamic_interactive_panel.py 
 
-TODO: save user interactive data
+to enter a diagram interactive mode.
+The results would show at generate_floor_plan_diagram/results.
+
+

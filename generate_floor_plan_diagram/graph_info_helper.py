@@ -55,7 +55,7 @@ def get_node_name_and_attr(node_name: str, node_dict: dict) -> str:
     if full_information:
         for key, value in attr_dict.items():
             res_str += key + ": " + str(value) + '\n'
-    
+
     else:
         if attr_dict['type'] == 'room':
             for key, value in attr_dict.items():
