@@ -27,11 +27,11 @@ def generate_diagram_from_text_output(text: str):
         node_position = get_node_pos(node, node_attr_dict)
         if node_is_room(node, node_attr_dict):
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float(node_position[0] * 150)},{float(node_position[1] * 150)}',
+                                      pos=f'{float(node_position[0] * 10)},{float(node_position[1] * 10)}',
                                       shape='box', style='filled', fillcolor='lightgreen')
         else:
             floor_plan_graph.add_node(node_name_and_attr,
-                                      pos=f'{float((node_position[0] ** 1) * 200)},{float((node_position[1] ** 1) * 200)}',
+                                      pos=f'{float((node_position[0] ** 1) * 30)},{float((node_position[1] ** 1) * 30)}',
                                       shape='box', style='filled', fillcolor='lightblue')
 
     g_node = floor_plan_graph.get_node(center_node)

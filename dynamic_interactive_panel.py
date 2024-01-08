@@ -81,7 +81,7 @@ class InteractivePanel:
         result_dir['user_path_trajectory'] = self.trajectory_history
         result_dir['user_steps'] = self.travel_step
 
-        file_name = 'generate_floor_plan_diagram/results/'+result_dir['user_name']+'_result.txt'
+        file_name = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}_{result_dir["source_node"]}_to_{result_dir["target_category"]}'+'_result.txt'
         with open(file_name, 'a') as file:
             file.write(str(result_dir))
             file.write('\n')
@@ -254,7 +254,7 @@ if __name__ == '__main__':
     parser.add_argument('--debug', type=bool, default=False)
     parser.add_argument('--scene_name', type=str, default='Allensville')  # only useful for interactive mode
     parser.add_argument('--source_node', type=str, default='room_11')  # only useful for interactive mode
-    parser.add_argument('--target_category', type=str, default='chair')  # only useful for interactive mode
+    parser.add_argument('--target_category', type=str, default='sink')  # only useful for interactive mode
     parser.add_argument('--save_dir', type=str, default='temp')  # only useful for interactive mode
     args = parser.parse_args()
 
