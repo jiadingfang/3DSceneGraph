@@ -127,18 +127,21 @@ class InteractivePanel:
         self.floorplan_image_label.pack()
 
         # fill mid frame
-        self.greeting = tk.Label(self.frame_mid, text=f"Hello user, let's find {self.target_category} step by step")
+        self.greeting = tk.Label(self.frame_mid, text=f"Hello user, let's find ")
         self.greeting.grid(row=0)
 
+        self.target_name = tk.Label(self.frame_mid, text=f"{self.target_category}", bg='white', fg='red', font=14)
+        self.target_name.grid(row=1)
+
         self.traj = tk.Label(self.frame_mid, text=f"Your current path is:{self.trajectory_history}")
-        self.traj.grid(row=1)
+        self.traj.grid(row=2)
 
         self.len_stp = tk.Label(self.frame_mid,
-                                text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
-        self.len_stp.grid(row=2)
+                                text=f"Total length: {round(self.trajectory_length, 4)}, Total steps: {self.travel_step}")
+        self.len_stp.grid(row=3)
 
         self.hint = tk.Label(self.frame_mid, text=f"Choose next place/item you want to visit/select")
-        self.hint.grid(row=3)
+        self.hint.grid(row=4)
 
         # fill the end frame
         node_list, node_attr_dict = graph_info_helper(text=scene_output_text)
@@ -163,7 +166,12 @@ class InteractivePanel:
         self.trajectory_length += self.graph_sim.get_step_length(previous_node, button_text)
         self.trajectory_history.append(button_text)
         self.travel_step += 1
+
         if self.travel_step > self.MAX_STEP:
+            self.trajectory_length -= self.graph_sim.get_step_length(previous_node, button_text)
+            self.trajectory_history = self.trajectory_history[:-1]
+            self.travel_step -= 1
+
             # generate the first diagram
             scene_output_text = self.graph_sim.panel_scene_text(current_node=self.source_node)
 
@@ -246,9 +254,9 @@ class InteractivePanel:
         self.floorplan_image_label.image = floorplan_image
 
         # update mid frame
-        self.greeting.configure(text=f"Hello user, let's find {self.target_category} step by step")
+        # self.greeting.configure(text=f"Hello user, let's find {self.target_category} step by step")
         self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
-        self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
+        self.len_stp.configure(text=f"Total length: {round(self.trajectory_length, 4)}, Total steps: {self.travel_step}")
 
         # update the end frame
         node_list, node_attr_dict = graph_info_helper(text=scene_output_text)
@@ -262,7 +270,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--user_name', type=str, default='luzhe')
+    parser.add_argument('--user_name', type=str, default='ShuoXie')
     parser.add_argument('--split_name', type=str, default='medium_automated')
     parser.add_argument('--n_samples_per_scene', type=int, default=5)
     parser.add_argument('--n_neighbors', type=int, default=4)
