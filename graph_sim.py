@@ -1,6 +1,7 @@
 import os
 import json
 import tqdm
+import yaml
 import numpy as np
 np.random.seed(42)
 import networkx as nx
@@ -270,14 +271,14 @@ class GraphSim:
         # sample source nodes from room list
         n_total = len(room_node_name_list)
         if n_samples is not None:
-            sample_list = np.random.choice(n_total, n_samples, replace=False)
+            sample_room_list = np.random.choice(n_total, n_samples, replace=False)
         else:
-            sample_list = list(range(n_total))
+            sample_room_list = list(range(n_total))
 
         # sample target_cateory from object list
         spl_by_distance_list, spl_by_steps_list = [], []
-        for sample_id in tqdm.tqdm(sample_list):
-            sample_room_name = room_node_name_list[sample_id]
+        for sample_room_id in tqdm.tqdm(sample_room_list):
+            sample_room_name = room_node_name_list[sample_room_id]
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
             
@@ -301,7 +302,7 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_mo
         scene_text_path = os.path.join(split_dir, scene_filename)
         try:
             graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
-            spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='logs/split_{}-model_{}-neighbors_{}/{}'.format(split_name, llm_model, n_neighbors, scene_name))
+            spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='test_logs/split_{}-model_{}-neighbors_{}/{}'.format(split_name, llm_model, n_neighbors, scene_name))
             spl_by_distance_mean = np.array(spl_by_distance_list).mean()
             spl_by_steps_mean = np.array(spl_by_steps_list).mean()
             print('spl_by_distance_mean: ', spl_by_distance_mean)
@@ -311,6 +312,56 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_mo
             split_spl_by_steps_list.extend(spl_by_steps_list)
         except Exception as e:
             print('Scene {} graph invalid with error {}. Skip.'.format(scene_name, e)) 
+
+    total_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
+    total_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
+    print('split: ', split_name)
+    print('total_spl_by_distance_mean: ', total_spl_by_distance_mean)
+    print('total_spl_by_steps_mean: ', total_spl_by_steps_mean)
+
+
+def run_tests_from_list(sample_list, llm_model='gpt-4', llm_steps_max_adaptive=True, debug=False):
+
+    with open(sample_list, 'r') as f:
+        sample_source_target_dict = yaml.load(f, Loader=yaml.FullLoader)
+    sample_set_name = sample_list.split('/')[-1].split('.')[0]
+    split_name = list(sample_source_target_dict.keys())[0]
+    sample_split_source_target_dict = sample_source_target_dict[split_name]
+
+    split_dir = 'scene_text/{}'.format(split_name)
+    # scene_filename_list = os.listdir(split_dir)
+    split_spl_by_distance_list, split_spl_by_steps_list = [], []
+
+    for scene_name in sample_split_source_target_dict.keys():
+        print('scene_name: ', scene_name)
+        scene_text_path = os.path.join(split_dir, scene_name + '.scn')
+        n_samples_per_scene = len(sample_split_source_target_dict[scene_name])
+        n_neighbors = 4
+        
+        graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
+
+        spl_by_distance_list, spl_by_steps_list = [], []
+        
+        for sample_source_target in sample_split_source_target_dict[scene_name]:
+            try:
+                print('sample_source_target: ', sample_source_target)
+                sample_room_name = 'room_{}'.format(sample_source_target['source_room'])
+                sample_target_category = sample_source_target['target_category']
+                spl_by_distance, spl_by_steps = graph_sim.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='test_logs/{}/split_{}-model_{}-neighbors_{}/{}/source_node-{}_target_category-{}'.format(sample_set_name, split_name, llm_model, n_neighbors, scene_name, sample_room_name, sample_target_category))
+            
+                if spl_by_distance is not None:
+                    spl_by_distance_list.append(spl_by_distance)
+                    spl_by_steps_list.append(spl_by_steps)
+            except Exception as e:
+                print('sample_source_target {} invalid with error {}. Skip.'.format(sample_source_target, e))
+        
+        spl_by_distance_mean = np.array(spl_by_distance_list).mean()
+        spl_by_steps_mean = np.array(spl_by_steps_list).mean()
+        print('spl_by_distance_mean: ', spl_by_distance_mean)
+        print('spl_by_steps_mean: ', spl_by_steps_mean)
+
+        split_spl_by_distance_list.extend(spl_by_distance_list)
+        split_spl_by_steps_list.extend(spl_by_steps_list)
 
     total_spl_by_distance_mean = np.array(split_spl_by_distance_list).mean()
     total_spl_by_steps_mean = np.array(split_spl_by_steps_list).mean()
@@ -356,6 +407,7 @@ if __name__=='__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--split_name', type=str, default='tiny_automated')
+    parser.add_argument('--sample_list', type=str, default='') # exclusive with n_samples_per_scene and n_neighbors
     parser.add_argument('--n_samples_per_scene', type=int, default=5)
     parser.add_argument('--n_neighbors', type=int, default=4)
     parser.add_argument('--llm_model', type=str, default='gpt-4-0613')
@@ -369,7 +421,10 @@ if __name__=='__main__':
     parser.add_argument('--save_dir', type=str, default='temp') # only useful for interactive mode
     args = parser.parse_args()
     if args.llm_eval:
-        run_tests_for_split(split_name=args.split_name, n_samples_per_scene=args.n_samples_per_scene, n_neighbors=args.n_neighbors, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, debug=args.debug)
+        if args.sample_list == '':
+            run_tests_for_split(split_name=args.split_name, n_samples_per_scene=args.n_samples_per_scene, n_neighbors=args.n_neighbors, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, debug=args.debug)
+        else:
+            run_tests_from_list(sample_list=args.sample_list, llm_model=args.llm_model, llm_steps_max_adaptive=True, debug=False)
     elif args.interactive:
         graph_sim = GraphSim(scene_text_path='scene_text/{}/{}.scn'.format(args.split_name, args.scene_name), n_neighbors=args.n_neighbors, scene_name=args.scene_name, debug=args.debug)
         gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node=args.source_node, target_category=args.target_category)
