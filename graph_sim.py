@@ -324,7 +324,7 @@ def run_tests_from_list(sample_list, llm_model='gpt-4', llm_steps_max_adaptive=T
 
     with open(sample_list, 'r') as f:
         sample_source_target_dict = yaml.load(f, Loader=yaml.FullLoader)
-    sample_set_name = sample_list.split('/')[-1].split('.')[0]
+    sample_set_name = sample_list.split('/')[-1].split('.yaml')[0]
     split_name = list(sample_source_target_dict.keys())[0]
     sample_split_source_target_dict = sample_source_target_dict[split_name]
 
