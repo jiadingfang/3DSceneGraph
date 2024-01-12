@@ -6,7 +6,7 @@ from pathlib import Path
 # log_dir = 'logs/split_tiny_automated-model_gpt-4-neighbors_4'
 # log_dir = 'logs/split_tiny_automated-model_gpt-3.5-turbo-neighbors_4'
 # log_dir = 'logs/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3-neighbors_4'
-log_dir = 'logs/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc-neighbors_4'
+# log_dir = 'logs/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc-neighbors_4'
 # log_dir = 'test_logs/split_tiny_automated-model_gpt-4-0613-neighbors_4'
 # log_dir = 'test_logs/split_tiny_automated-model_gpt-3.5-turbo-0613-neighbors_4'
 # log_dir = 'test_logs/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3-neighbors_4'
@@ -15,6 +15,14 @@ log_dir = 'logs/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc-
 # log_dir = 'test_logs/split_tiny_verified-model_gpt-3.5-turbo-0613-neighbors_4'
 # log_dir = 'test_logs/split_tiny_verified-model_ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3-neighbors_4'
 # log_dir = 'test_logs/split_tiny_verified-model_ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc-neighbors_4'
+# log_dir = 'test_logs/sample_source_target_dict_tiny_automated_gpt-3.5-correct/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl2tnqc-neighbors_4'
+# log_dir = 'test_logs/sample_source_target_dict_tiny_automated_gpt-3.5-correct/split_tiny_automated-model_ft:gpt-3.5-turbo-0613:ripl::8Bl5JCs3-neighbors_4'
+# log_dir = 'test_logs/sample_source_target_dict_tiny_automated_gpt-3.5-correct/split_tiny_automated-model_gpt-3.5-turbo-0613-neighbors_4'
+# log_dir = 'test_logs/sample_source_target_dict_tiny_automated_gpt-3.5-correct/split_tiny_automated-model_gpt-4-0613-neighbors_4'
+# log_dir = 'test_logs/graph_history/sample_source_target_dict_tiny_verified_gpt-4/split_tiny_verified-model_gpt-4-0613-neighbors_4'
+# log_dir = 'test_logs/graph_history/sample_source_target_dict_tiny_automated_gpt-4/split_tiny_automated-model_gpt-4-0613-neighbors_4'
+# log_dir = 'test_logs/graph_history/sample_source_target_dict_tiny_automated_gpt-4/split_tiny_automated-model_gpt-4-0613-neighbors_4'
+log_dir = 'test_logs/graph_history/sample_source_target_dict_tiny_automated_gpt-4/split_tiny_automated-model_gpt-4-1106-preview-neighbors_4'
 print('log_dir: ', log_dir)
 split_name = log_dir.split('split_')[1].split('-model')[0]
 
@@ -28,7 +36,7 @@ for scene_name in os.listdir(log_dir):
     total_split_metrics_dict['spl_by_steps'][scene_name] = []
 
     for sample_task_name in os.listdir(scene_dir):
-        task_metrics_path = glob.glob(str(scene_dir / sample_task_name / 'metrics_*.json'))[0]
+        task_metrics_path = sorted(glob.glob(str(scene_dir / sample_task_name / 'metrics_*.json')))[-1] # use the last one
         with open(task_metrics_path, 'r') as f:
             task_metrics = json.load(f)
             # print(task_metrics)
@@ -43,7 +51,7 @@ for metric_name in total_split_metrics_dict.keys():
     for scene_name in total_split_metrics_dict[metric_name].keys():
         total_split_metrics_dict_mean_per_scene[metric_name][scene_name] = sum(total_split_metrics_dict[metric_name][scene_name]) / len(total_split_metrics_dict[metric_name][scene_name])
         total_split_metrics_dict_std_per_scene[metric_name][scene_name] = (sum([(x - total_split_metrics_dict_mean_per_scene[metric_name][scene_name])**2 for x in total_split_metrics_dict[metric_name][scene_name]]) / len(total_split_metrics_dict[metric_name][scene_name])) ** 0.5
-# print('total_split_metrics_dict_mean_per_scene: ', total_split_metrics_dict_mean_per_scene)
+print('total_split_metrics_dict_mean_per_scene: ', total_split_metrics_dict_mean_per_scene)
 # print('total_split_metrics_dict_std_per_scene: ', total_split_metrics_dict_std_per_scene)
 
 total_split_metrics_dict_mean = {'spl_by_distance': 0, 'spl_by_steps': 0}

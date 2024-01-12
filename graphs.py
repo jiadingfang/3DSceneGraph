@@ -1,4 +1,5 @@
 import json
+import copy
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -278,3 +279,25 @@ class GraphTypeTwo:
             edge_labels = {key: np.round(value, decimals=2) for key, value in edge_labels.items()}
             nx.draw_networkx_edge_labels(self.graph, pos, edge_labels)
             plt.show()
+
+    @staticmethod
+    def compress_node_info(node_info, node_info_type='full'):
+        """
+        Compress node information to save memory.
+        """
+        node_info_copy = copy.deepcopy(node_info)
+        if node_info_type == 'full':
+            node_info_copy = node_info_copy
+        elif node_info_type == 'compressed':
+            if node_info_copy['type'] == 'room':
+                node_info_copy = {'scene_category': node_info_copy['scene_category'], 'floor_number': node_info_copy['floor_number'], 'location': node_info_copy['location']}
+            elif node_info_copy['type'] == 'object':
+                node_info_copy = {'class_': node_info_copy['class_'], 'location': node_info_copy['location']}
+        elif node_info_type == 'compressed_nonmetric':
+            if node_info_copy['type'] == 'room':
+                node_info_copy = {'scene_category': node_info_copy['scene_category'], 'floor_number': node_info_copy['floor_number']}
+            elif node_info_copy['type'] == 'object':
+                node_info_copy = {'class_': node_info_copy['class_']}
+        else:
+            raise NotImplementedError('node_info_type {} not implemented. Choose from full and compressed.'.format(node_info_type))
+        return node_info_copy

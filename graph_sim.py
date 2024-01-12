@@ -2,6 +2,7 @@ import os
 import json
 import tqdm
 import yaml
+import functools
 import numpy as np
 np.random.seed(42)
 import networkx as nx
@@ -30,9 +31,9 @@ class GraphSim:
         
         # create graph
         # self.graph = GraphTypeOne(scene_data=self.scene_data, n_neighbors=self.n_neighbors, scene_name=self.scene_name, debug=self.debug).graph
-        graph_meta = GraphTypeTwo(scene_data=self.scene_data, n_neighbors=self.n_neighbors, scene_name=self.scene_name, debug=self.debug)
-        self.graph = graph_meta.graph
-        self.graph_description = graph_meta.graph_description
+        self.graph_meta = GraphTypeTwo(scene_data=self.scene_data, n_neighbors=self.n_neighbors, scene_name=self.scene_name, debug=self.debug)
+        self.graph = self.graph_meta.graph
+        self.graph_description = self.graph_meta.graph_description
 
     def calc_shortest_path_between_two_nodes(self, source_node, target_node):
         if self.debug:
@@ -102,13 +103,14 @@ class GraphSim:
                 print('The number {} neighbor place is {} with information {}'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node]))
             next_id = int(input("Please input your desired place to do next from {}: ".format(list(range(1, 1 + len(neighbor_nodes))))))
             next_node = neighbor_nodes[next_id - 1]
-            if next_node.startswith('object'):
-                category_found = target_category == self.graph.nodes[next_node]['class_']
-            else:
-                category_found = target_category == self.graph.nodes[next_node]['scene_category']
             
             trajectory_list.append(next_node)
             trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
+            if next_node.startswith('object'):
+                category_found = target_category == self.graph.nodes[next_node]['class_']
+                break # break out of while loop
+            # else:
+            #     category_found = target_category == self.graph.nodes[next_node]['scene_category']
 
             travel_steps += 1
             current_node = next_node
@@ -123,7 +125,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def llm_category_finding(self, source_node, target_category, model='gpt-4', llm_steps_max=10, save_dir=None):
+    def llm_category_finding(self, source_node, target_category, model='gpt-4', llm_steps_max=10, history_type='list', node_info_type='full', save_dir=None):
         if self.debug:
             print('source_node: ', source_node)
             print('target_category: ', target_category)
@@ -133,6 +135,7 @@ class GraphSim:
         current_node = source_node
         trajectory_list = [current_node]
         trajectory_length = 0
+        raw_observe_history = []
 
         if save_dir is not None:
             save_list = []
@@ -143,12 +146,32 @@ class GraphSim:
             prompt += "The environment is represented as a graph."
             prompt += self.graph_description
             prompt += "Your task is to find an object in the category '{}' with shortest path possible\n.".format(target_category)
-            prompt += 'You have visted places {}: \n'.format(trajectory_list)
-            prompt += 'The current place is {} with information {}\n'.format(current_node, self.graph.nodes[current_node])
-            prompt += 'It has {} number of neighbors: \n'.format(len(neighbor_nodes))
+            if history_type == 'list':
+                prompt += 'You have visted places {}: \n'.format(trajectory_list)
+            elif history_type == 'aggregated_graphs':
+                prompt += 'You have visted places {}: \n'.format(trajectory_list)
+                aggregated_graph_edges = self.graph.edges(trajectory_list)
+                aggregated_graph_weighted_edges = [(edge[0], edge[1], round(self.graph.edges[edge]['weight'], 2)) for edge in aggregated_graph_edges]
+                aggregated_graph_nodes = functools.reduce(lambda a, b: a | b, [set(self.graph.successors(node_name)) for node_name in trajectory_list])
+                aggregated_graph_annotated_nodes = [(node_name, self.graph_meta.compress_node_info(self.graph.nodes[node_name], node_info_type=node_info_type)) for node_name in aggregated_graph_nodes]
+                prompt += 'During your visit, you have observed part of the building represented as a graph with nodes formatted as (node, info): {} and weighted edges formatted as (node_1, node_2, edge length): {}. \n'.format(aggregated_graph_annotated_nodes, aggregated_graph_weighted_edges)
+            elif history_type == 'raw_observation_history':
+                prompt += 'During your visit, you have observed the following information: \n'
+                for raw_observe in raw_observe_history:
+                    prompt += raw_observe
+            else:
+                prompt += ''
+
+            current_observation = 'The current place is {} with information {}\n'.format(current_node, self.graph.nodes[current_node])
+            current_observation += 'It has {} number of neighbors: \n'.format(len(neighbor_nodes))
             for i, neighbor_node in enumerate(neighbor_nodes):
-                prompt += 'The number {} neighbor place is {} with information {}\n'.format(i+1, neighbor_node, self.graph.nodes[neighbor_node])
-            prompt += "Please answer your desired place to go next from the neghbor list of {}. Reason about it step by step. At the end of your reasoning, output the neighbor name with the format of a python dictionary with key 'choice' and value the name of chosen neighbor.".format(neighbor_nodes)
+                node_info = self.graph.nodes[neighbor_node]
+                node_info = self.graph_meta.compress_node_info(node_info=node_info, node_info_type=node_info_type)
+                current_observation += 'The number {} neighbor place is {} with information {}\n'.format(i+1, neighbor_node, node_info)
+            prompt += current_observation
+            raw_observe_history.append(current_observation)
+
+            prompt += "Please answer your desired place to go next from the neghbor list of {}. Choose an object node only if you have found the object in the desired category, otherwise choose an room node. Reason about it step by step. At the end of your reasoning, output the neighbor name with the format of a python dictionary with key 'choice' and value the name of chosen neighbor.".format(neighbor_nodes)
 
             # if model == 'gpt-3.5-turbo-instruct':
             #     response_text, llm_response = CompletionCall(prompt=prompt)
@@ -172,13 +195,15 @@ class GraphSim:
             
             # try getting answer from llm response
             try:
-                next_node = eval('{' + response_text.split('{')[1].split('}')[0] + '}')['choice']
-                if next_node.startswith('object'):
-                    category_found = target_category == self.graph.nodes[next_node]['class_']
-                else:
-                    category_found = target_category == self.graph.nodes[next_node]['scene_category']
+                # next_node = eval('{' + response_text.split('{')[1].split('}')[0] + '}')['choice']
+                next_node = eval('{' + response_text.split('}')[-2].split('{')[1] + '}')['choice']
                 trajectory_length += self.graph.edges[(current_node, next_node)]['weight']
                 trajectory_list.append(next_node)
+                if next_node.startswith('object'):
+                    category_found = target_category == self.graph.nodes[next_node]['class_']
+                    break # break out of while loop
+                # else:
+                #     category_found = target_category == self.graph.nodes[next_node]['scene_category']
 
             except Exception as e:
                 if self.debug:
@@ -217,7 +242,7 @@ class GraphSim:
 
         return trajectory_length, trajectory_list
     
-    def run_one_sample(self, source_node, target_category, llm_model='gpt-4', llm_steps_max_adaptive=True, save_dir=None):
+    def run_one_sample(self, source_node, target_category, llm_model='gpt-4', llm_steps_max_adaptive=True, history_type='list', node_info_type='full', save_dir=None):
 
         if self.debug:
             print('source node: ', source_node)
@@ -235,7 +260,7 @@ class GraphSim:
         else:
             llm_steps_max = 10
 
-        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model=llm_model, save_dir=save_dir)
+        llm_shortest_path_length, llm_shortest_path_trajectory = self.llm_category_finding(source_node=source_node, target_category=target_category, llm_steps_max=llm_steps_max, model=llm_model, history_type=history_type, node_info_type=node_info_type, save_dir=save_dir)
 
         # calculate metrics
         log_dict = {}
@@ -262,7 +287,7 @@ class GraphSim:
 
         return spl_by_distance, spl_by_steps
 
-    def sampling_tests_for_scene(self, n_samples=None, llm_model='gpt-4', llm_steps_max_adaptive=True, save_dir=None):
+    def sampling_tests_for_scene(self, n_samples=None, llm_model='gpt-4', llm_steps_max_adaptive=True, history_type='list', node_info_type='full', save_dir=None):
         object_node_name_list = [node_name for node_name in self.graph.nodes if 'object' in node_name]
         object_category_list = sorted(list(set([self.graph.nodes[object_node]['class_'] for object_node in object_node_name_list])))
         n_categories = len(object_category_list)
@@ -282,7 +307,7 @@ class GraphSim:
             sample_category_id = np.random.choice(n_categories, 1)[0]
             sample_target_category = object_category_list[sample_category_id]
             
-            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir=os.path.join(save_dir, 'source_node-{}_target_category-{}'.format(sample_room_name, sample_target_category)))
+            spl_by_distance, spl_by_steps = self.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, history_type=history_type, node_info_type=node_info_type, save_dir=os.path.join(save_dir, 'source_node-{}_target_category-{}'.format(sample_room_name, sample_target_category)))
 
             if spl_by_distance is not None:
                 spl_by_distance_list.append(spl_by_distance)
@@ -290,7 +315,7 @@ class GraphSim:
 
         return spl_by_distance_list, spl_by_steps_list
 
-def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_model='gpt-4', llm_steps_max_adaptive=True, debug=False):
+def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_model='gpt-4', llm_steps_max_adaptive=True, history_type='list', save_dir='test_logs', debug=False):
     split_dir = 'scene_text/{}'.format(split_name)
     scene_filename_list = os.listdir(split_dir)
     # scene_filename_list = ['Newfields.scn']
@@ -302,7 +327,7 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_mo
         scene_text_path = os.path.join(split_dir, scene_filename)
         try:
             graph_sim = GraphSim(scene_text_path=scene_text_path, n_neighbors=n_neighbors, scene_name=scene_name, debug=debug)
-            spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='test_logs/split_{}-model_{}-neighbors_{}/{}'.format(split_name, llm_model, n_neighbors, scene_name))
+            spl_by_distance_list, spl_by_steps_list = graph_sim.sampling_tests_for_scene(n_samples=n_samples_per_scene, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, history_type=history_type, save_dir='{}/split_{}-model_{}-neighbors_{}/{}'.format(save_dir, split_name, llm_model, n_neighbors, scene_name))
             spl_by_distance_mean = np.array(spl_by_distance_list).mean()
             spl_by_steps_mean = np.array(spl_by_steps_list).mean()
             print('spl_by_distance_mean: ', spl_by_distance_mean)
@@ -320,7 +345,7 @@ def run_tests_for_split(split_name, n_samples_per_scene=1, n_neighbors=3, llm_mo
     print('total_spl_by_steps_mean: ', total_spl_by_steps_mean)
 
 
-def run_tests_from_list(sample_list, llm_model='gpt-4', llm_steps_max_adaptive=True, debug=False):
+def run_tests_from_list(sample_list, llm_model='gpt-4', llm_steps_max_adaptive=True, history_type='list', node_info_type='full', save_dir='test_logs', debug=False):
 
     with open(sample_list, 'r') as f:
         sample_source_target_dict = yaml.load(f, Loader=yaml.FullLoader)
@@ -347,7 +372,7 @@ def run_tests_from_list(sample_list, llm_model='gpt-4', llm_steps_max_adaptive=T
                 print('sample_source_target: ', sample_source_target)
                 sample_room_name = 'room_{}'.format(sample_source_target['source_room'])
                 sample_target_category = sample_source_target['target_category']
-                spl_by_distance, spl_by_steps = graph_sim.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, save_dir='test_logs/{}/split_{}-model_{}-neighbors_{}/{}/source_node-{}_target_category-{}'.format(sample_set_name, split_name, llm_model, n_neighbors, scene_name, sample_room_name, sample_target_category))
+                spl_by_distance, spl_by_steps = graph_sim.run_one_sample(source_node=sample_room_name, target_category=sample_target_category, llm_model=llm_model, llm_steps_max_adaptive=llm_steps_max_adaptive, history_type=history_type, node_info_type=node_info_type, save_dir='{}/{}/split_{}-model_{}-neighbors_{}/{}/source_node-{}_target_category-{}'.format(save_dir, sample_set_name, split_name, llm_model, n_neighbors, scene_name, sample_room_name, sample_target_category))
             
                 if spl_by_distance is not None:
                     spl_by_distance_list.append(spl_by_distance)
@@ -412,6 +437,8 @@ if __name__=='__main__':
     parser.add_argument('--n_neighbors', type=int, default=4)
     parser.add_argument('--llm_model', type=str, default='gpt-4-0613')
     parser.add_argument('--llm_steps_max_adaptive', type=bool, default=True)
+    parser.add_argument('--history_type', type=str, default='list', choices=['list', 'aggregated_graphs', 'raw_observation_history'])
+    parser.add_argument('--node_info_type', type=str, default='full', choices=['full', 'compressed', 'compressed_nonmetric'])
     parser.add_argument('--debug', type=bool, default=False)
     parser.add_argument('--llm_eval', action='store_true')
     parser.add_argument('--interactive', action='store_true')
@@ -422,9 +449,9 @@ if __name__=='__main__':
     args = parser.parse_args()
     if args.llm_eval:
         if args.sample_list == '':
-            run_tests_for_split(split_name=args.split_name, n_samples_per_scene=args.n_samples_per_scene, n_neighbors=args.n_neighbors, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, debug=args.debug)
+            run_tests_for_split(split_name=args.split_name, n_samples_per_scene=args.n_samples_per_scene, n_neighbors=args.n_neighbors, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, history_type=args.history_type, node_info_type=args.node_info_type, save_dir=args.save_dir, debug=args.debug)
         else:
-            run_tests_from_list(sample_list=args.sample_list, llm_model=args.llm_model, llm_steps_max_adaptive=True, debug=False)
+            run_tests_from_list(sample_list=args.sample_list, llm_model=args.llm_model, llm_steps_max_adaptive=args.llm_steps_max_adaptive, history_type=args.history_type, node_info_type=args.node_info_type, save_dir=args.save_dir, debug=args.debug)
     elif args.interactive:
         graph_sim = GraphSim(scene_text_path='scene_text/{}/{}.scn'.format(args.split_name, args.scene_name), n_neighbors=args.n_neighbors, scene_name=args.scene_name, debug=args.debug)
         gt_shortest_path_pair = graph_sim.calc_shortest_path_between_one_node_and_category(source_node=args.source_node, target_category=args.target_category)
