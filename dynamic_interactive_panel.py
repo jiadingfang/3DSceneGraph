@@ -3,6 +3,7 @@ from PIL import Image, ImageTk
 from graph_sim import GraphSim
 from generate_floor_plan_diagram.generate_diagram import generate_diagram_from_text_output
 from generate_floor_plan_diagram.graph_info_helper import *
+import fitz  # PyMuPDF
 import _pickle as pickle
 import os
 
@@ -50,6 +51,7 @@ class InteractivePanel:
         self.travel_step = 0
         self.source_node = source_node
         self.target_category = target_category
+        self.record = True
 
         # Creating the main window
         self.root = tk.Tk()
@@ -59,15 +61,92 @@ class InteractivePanel:
         self.desired_width = 1000
         self.desired_height = 700
 
-        self.frame_up = tk.Frame(self.root, width=self.desired_width, height=1000)
-        self.frame_up.pack()
-        self.frame_mid = tk.Frame(self.root, width=self.desired_width, height=500)
-        self.frame_mid.pack()
-        self.frame_low = tk.Frame(self.root, width=self.desired_width, height=700)
-        self.frame_low.pack()
+        # Create the main canvas and scrollbar
+        # Create the main canvas and scrollbars
+        self.main_canvas = tk.Canvas(self.root)
+        self.v_scrollbar = tk.Scrollbar(self.root, orient="vertical", command=self.main_canvas.yview)
+        self.h_scrollbar = tk.Scrollbar(self.root, orient="horizontal", command=self.main_canvas.xview)
+        self.main_canvas.configure(yscrollcommand=self.v_scrollbar.set, xscrollcommand=self.h_scrollbar.set)
+
+        # Pack the scrollbars and canvas
+        self.v_scrollbar.pack(side="right", fill="y")
+        self.h_scrollbar.pack(side="bottom", fill="x")
+        self.main_canvas.pack(side="left", fill="both", expand=True)
+
+        # Create a frame inside the main canvas
+        self.main_frame = tk.Frame(self.main_canvas)
+        self.canvas_window = self.main_canvas.create_window((0, 0), window=self.main_frame, anchor='nw')
+
+        # Set up frames
+        self.frame_up = tk.Frame(self.main_frame, width=self.desired_width, height=1000)
+        self.frame_mid = tk.Frame(self.main_frame, width=self.desired_width, height=500)
+        self.frame_low = tk.Frame(self.main_frame, width=self.desired_width, height=700)
+
+        # Grid configuration for main_frame
+        self.main_frame.grid_columnconfigure(0, weight=1)
+        self.frame_up.grid(row=0, column=0, sticky='ew')
+        self.frame_mid.grid(row=1, column=0, sticky='ew')
+        self.frame_low.grid(row=2, column=0, sticky='ew')
+
+        # Add zoom in and zoom out buttons
+        zoom_in_button = tk.Button(self.frame_up, text="Zoom In", command=self.zoom_in)
+        zoom_in_button.grid(row=0, column=0)
+        zoom_out_button = tk.Button(self.frame_up, text="Zoom Out", command=self.zoom_out)
+        zoom_out_button.grid(row=0, column=1)
+
+        # Configure the grid rows and columns
+        self.frame_up.grid_rowconfigure(1, weight=1)
+        self.frame_up.grid_columnconfigure(0, weight=1)
+        self.frame_up.grid_columnconfigure(1, weight=1)
 
         # Initialization
         self.initialization()
+
+    def onFrameConfigure(self, event=None):
+        self.main_canvas.configure(scrollregion=self.main_canvas.bbox("all"))
+
+    def load_pdf_page(self, pdf_path, page_number=0, zoom_factor=1.0):
+        # Open the PDF file
+        pdf_document = fitz.open(pdf_path)
+        # Select the page
+        pdf_page = pdf_document.load_page(page_number)
+        # Define the zoom factor and get the pixmap
+        zoom_matrix = fitz.Matrix(zoom_factor, zoom_factor)
+        pix = pdf_page.get_pixmap(matrix=zoom_matrix)
+        # Convert to a PIL image
+        image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        pdf_document.close()
+        return image
+
+    def display_pdf(self, pdf_path):
+        # Load the first page of the PDF
+        self.current_pdf_image = self.load_pdf_page(pdf_path, zoom_factor=self.current_zoom_level)
+        self.current_pdf_photo = ImageTk.PhotoImage(self.current_pdf_image)
+        self.pdf_image_label = tk.Label(self.frame_up, image=self.current_pdf_photo)
+        self.pdf_image_label.grid(row=1, column=0, columnspan=2, sticky='nsew')
+
+        # Make sure the frame_up is configured to expand
+        self.frame_up.grid_rowconfigure(1, weight=1)
+        self.frame_up.grid_columnconfigure(0, weight=1)
+        self.frame_up.grid_columnconfigure(1, weight=1)
+
+    def zoom_in(self):
+        self.current_zoom_level *= 1.25  # Increase zoom level
+        self.update_pdf_display()
+
+    def zoom_out(self):
+        self.current_zoom_level *= 0.8  # Decrease zoom level
+        self.update_pdf_display()
+
+    def update_pdf_display(self):
+        # Update the PDF display
+        self.current_pdf_image = self.load_pdf_page(self.current_pdf_path, zoom_factor=self.current_zoom_level)
+        self.current_pdf_photo = ImageTk.PhotoImage(self.current_pdf_image)
+        self.pdf_image_label.configure(image=self.current_pdf_photo)
+        self.pdf_image_label.image = self.current_pdf_photo  # update the reference
+
+        # Update the scrollable region
+        self.onFrameConfigure()
 
     def resize_image(self, image: Image):
         original_width, original_height = image.size
@@ -75,7 +154,7 @@ class InteractivePanel:
             according_height = int((self.desired_width / original_width) * original_height)
             image = image.resize((self.desired_width, according_height))
         else:
-            according_width = int((self.desired_height/original_height) * original_width)
+            according_width = int((self.desired_height / original_height) * original_width)
             image = image.resize((according_width, self.desired_height))
         return image
 
@@ -92,19 +171,18 @@ class InteractivePanel:
         result_dir['spl_by_distance'] = spl_by_distance
         result_dir['spl_by_steps'] = spl_by_steps
 
-        path = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}'
+        path = 'generate_floor_plan_diagram/results/' + f'{result_dir["scene_name"]}'
         # Check whether the specified path exists or not
         isExist = os.path.exists(path)
         if not isExist:
             os.makedirs(path)
 
-        file_name = 'generate_floor_plan_diagram/results/'+f'{result_dir["scene_name"]}/{result_dir["source_node"]}_to_{result_dir["target_category"]}'+'.txt'
+        file_name = 'generate_floor_plan_diagram/results/' + f'{result_dir["scene_name"]}/{result_dir["source_node"]}_to_{result_dir["target_category"]}' + '.txt'
         with open(file_name, 'a') as file:
             file.write(str(result_dir))
             file.write('\n')
 
         file.close()
-
 
     def initialization(self):
         self.trajectory_history.append(self.source_node)
@@ -117,14 +195,9 @@ class InteractivePanel:
         # init image
         generate_diagram_from_text_output(text=scene_output_text)
 
-        floorplan_image_path = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"  # Change this to your initial PNG file path
-        floorplan_image = Image.open(floorplan_image_path)
-        # Calculate the new height based on the specified width
-        floorplan_image = self.resize_image(floorplan_image)
-        floorplan_image = ImageTk.PhotoImage(floorplan_image)
-        self.floorplan_image_label = tk.Label(self.frame_up, image=floorplan_image)
-        self.floorplan_image_label.image = floorplan_image
-        self.floorplan_image_label.pack()
+        self.current_zoom_level = 1.0
+        self.current_pdf_path = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.pdf"  # Change to your PDF path
+        self.display_pdf(self.current_pdf_path)
 
         # fill mid frame
         self.greeting = tk.Label(self.frame_mid, text=f"Hello user, let's find ")
@@ -172,26 +245,19 @@ class InteractivePanel:
             self.trajectory_history = self.trajectory_history[:-1]
             self.travel_step -= 1
 
-            # generate the first diagram
-            scene_output_text = self.graph_sim.panel_scene_text(current_node=self.source_node)
-
             # update image
-            generate_diagram_from_text_output(text=scene_output_text)
+            self.current_zoom_level = 0.5
+            self.current_pdf_path = "generate_floor_plan_diagram/generated_images/fail.pdf"
+            self.display_pdf(self.current_pdf_path)
 
-            floorplan_image_path = "generate_floor_plan_diagram/generated_images/fail.png"  # Change this to your initial PNG file path
-            floorplan_image = Image.open(floorplan_image_path)
-            # Calculate the new height based on the specified width
-            floorplan_image = self.resize_image(floorplan_image)
-            floorplan_image = ImageTk.PhotoImage(floorplan_image)
-            self.floorplan_image_label.configure(image=floorplan_image)
-            self.floorplan_image_label.image = floorplan_image
             for button in self.buttons_manager:
                 button.destroy()
 
             self.greeting.configure(text=f"Sorry, you didn't find {self.target_category} in time!", fg='red', font=20)
             self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
             self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
-            self.record_result()
+            if self.record:
+                self.record_result()
 
             return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
 
@@ -199,17 +265,9 @@ class InteractivePanel:
             self.success = (self.graph_sim.graph.nodes[button_text]['class_'] == self.target_category)
             if self.success:
                 # generate the first diagram
-                scene_output_text = self.graph_sim.panel_scene_text(current_node=self.source_node)
-
-                # update image
-                generate_diagram_from_text_output(text=scene_output_text)
-
-                floorplan_image_path = "generate_floor_plan_diagram/generated_images/success.png"  # Change this to your initial PNG file path
-                floorplan_image = Image.open(floorplan_image_path)
-                floorplan_image = self.resize_image(floorplan_image)
-                floorplan_image = ImageTk.PhotoImage(floorplan_image)
-                self.floorplan_image_label.configure(image=floorplan_image)
-                self.floorplan_image_label.image = floorplan_image
+                self.current_zoom_level = 0.5
+                self.current_pdf_path = "generate_floor_plan_diagram/generated_images/success.pdf"
+                self.display_pdf(self.current_pdf_path)
                 for button in self.buttons_manager:
                     button.destroy()
 
@@ -217,52 +275,47 @@ class InteractivePanel:
                 self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
                 self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
 
-                self.record_result()
+                if self.record:
+                    self.record_result()
                 return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
 
             else:
-                floorplan_image_path = "generate_floor_plan_diagram/generated_images/fail.png"  # Change this to your initial PNG file path
-                floorplan_image = Image.open(floorplan_image_path)
-                floorplan_image = self.resize_image(floorplan_image)
-                floorplan_image = ImageTk.PhotoImage(floorplan_image)
-                self.floorplan_image_label.configure(image=floorplan_image)
-                self.floorplan_image_label.image = floorplan_image
+                self.current_zoom_level = 0.5
+                self.current_pdf_path = "generate_floor_plan_diagram/generated_images/fail.pdf"
+                self.display_pdf(self.current_pdf_path)
                 for button in self.buttons_manager:
                     button.destroy()
 
-                self.greeting.configure(text=f"Sorry, you found the wrong item, we need {self.target_category}!", fg='red',
+                self.greeting.configure(text=f"Sorry, you found the wrong item, we need {self.target_category}!",
+                                        fg='red',
                                         font=20)
                 self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
                 self.len_stp.configure(text=f"Total Length: {self.trajectory_length}, Total steps: {self.travel_step}")
 
-                self.record_result()
+                if self.record:
+                    self.record_result()
                 return self.success, self.trajectory_length, self.trajectory_history, self.travel_step
-
 
         # generate the first diagram
         scene_output_text = self.graph_sim.panel_scene_text(current_node=button_text)
 
         # update image
         generate_diagram_from_text_output(text=scene_output_text)
-
-        floorplan_image_path = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"  # Change this to your initial PNG file path
-        floorplan_image = Image.open(floorplan_image_path)
-        # Calculate the new height based on the specified width
-        floorplan_image = self.resize_image(floorplan_image)
-        floorplan_image = ImageTk.PhotoImage(floorplan_image)
-        self.floorplan_image_label.configure(image=floorplan_image)
-        self.floorplan_image_label.image = floorplan_image
+        self.display_pdf(self.current_pdf_path)
 
         # update mid frame
         # self.greeting.configure(text=f"Hello user, let's find {self.target_category} step by step")
         self.traj.configure(text=f"Your current path is:{self.trajectory_history}")
-        self.len_stp.configure(text=f"Total length: {round(self.trajectory_length, 4)}, Total steps: {self.travel_step}")
+        self.len_stp.configure(
+            text=f"Total length: {round(self.trajectory_length, 4)}, Total steps: {self.travel_step}")
 
         # update the end frame
         node_list, node_attr_dict = graph_info_helper(text=scene_output_text)
         self.create_buttons(node_list[1:])
 
-    def run(self):
+    def run(self, record=True):
+        self.record = record
+        self.main_frame.bind("<Configure>", self.onFrameConfigure)
         self.root.mainloop()
 
 
@@ -270,7 +323,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--user_name', type=str, default='ShuoXie')
+    parser.add_argument('--user_name', type=str, default='test')
     parser.add_argument('--split_name', type=str, default='medium_automated')
     parser.add_argument('--n_samples_per_scene', type=int, default=5)
     parser.add_argument('--n_neighbors', type=int, default=4)
@@ -302,6 +355,4 @@ if __name__ == '__main__':
                              source_node=args.source_node,
                              target_category=args.target_category)
 
-    panel.run()
-
-
+    panel.run(record=False)

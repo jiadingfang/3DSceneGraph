@@ -65,9 +65,13 @@ def generate_diagram_from_text_output(text: str):
     floor_plan_graph.graph_attr['constraint'] = 'false'
 
     # Render the UML diagram
-    output_file = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"
+    # output_file = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.png"
     # floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
-    floor_plan_graph.draw(output_file, prog="neato", args='-n1', format="png")
+    # floor_plan_graph.draw(output_file, prog="neato", args='-n1', format="png")
+
+    output_file = "generate_floor_plan_diagram/generated_images/floor_plan_diagram.pdf"
+    # floor_plan_graph.draw(output_file, prog="neato", args='-n2', format="png")
+    floor_plan_graph.draw(output_file, prog="neato", args='-n1', format="pdf")
 
 
     print(f"UML Class diagram generated: {output_file}")
