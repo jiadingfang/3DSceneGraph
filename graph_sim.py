@@ -153,6 +153,8 @@ class GraphSim:
                 aggregated_graph_edges = self.graph.edges(trajectory_list)
                 aggregated_graph_weighted_edges = [(edge[0], edge[1], round(self.graph.edges[edge]['weight'], 2)) for edge in aggregated_graph_edges]
                 aggregated_graph_nodes = functools.reduce(lambda a, b: a | b, [set(self.graph.successors(node_name)) for node_name in trajectory_list])
+                for node_name in trajectory_list:
+                    aggregated_graph_nodes.add(node_name)
                 aggregated_graph_annotated_nodes = [(node_name, self.graph_meta.compress_node_info(self.graph.nodes[node_name], node_info_type=node_info_type)) for node_name in aggregated_graph_nodes]
                 prompt += 'During your visit, you have observed part of the building represented as a graph with nodes formatted as (node, info): {} and weighted edges formatted as (node_1, node_2, edge length): {}. \n'.format(aggregated_graph_annotated_nodes, aggregated_graph_weighted_edges)
             elif history_type == 'raw_observation_history':
